@@ -16,3 +16,51 @@ input:focus { box-shadow: 0 0 5px rgba(81, 203, 238, 1); -webkit-box-shadow: 0 0
 .mButton { text-decoration: none; background: rgba(81, 203, 238, 1); color: white; padding: 6px 25px 6px 25px; font: 12px '微软雅黑'; border-radius: 3px; -webkit-transition: all linear 0.30s; -moz-transition: all linear 0.30s; transition: all linear 0.30s; }
 
 .mButton:hover { background: rgba(39, 154, 187, 1); }
+
+#panel1 {
+    position: relative;
+    background-color: white;
+    max-height: 90%;
+    overflow-y: auto;
+    top: 10px;
+    left: 75%;
+    width: 25%;
+    z-index:100;
+}
+#panel2 {
+    position: relative;
+    background-color: white;
+    max-height: 90%;
+    overflow-y: auto;
+    top: 10px;
+    left: 75%;
+    width: 25%;
+    z-index:100;
+}
+#panel4 {
+    position: relative;
+    background-color: white;
+    max-height: 90%;
+    overflow-y: auto;
+    top: 10px;
+    left: 75%;
+    width: 25%;
+    z-index:100;
+}
+#panel5 {
+    position: relative;
+    background-color: white;
+    max-height: 90%;
+    overflow-y: auto;
+    top: 10px;
+    left: 75%;
+    width: 25%;
+    z-index:100;
+}
+
+.busstop{
+    font-size: 10px;
+}
+span{
+    font-size: 10px;
+}

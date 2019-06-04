@@ -7,9 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="YuChen Chai">
-  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XMImW1WMHFg9GnOxenPb480rcg2VjZ7r"></script>
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<!--  高德地图API-->
+  <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=2ef52157e7e81867dbc9c4b1b0b84e92&plugin=AMap.Driving,AMap.Transfer,AMap.Riding,AMap.Walking"></script>
 
   <title>欢迎来到郑东新区实验——一个MIT的城市实验</title>
 
@@ -20,10 +20,6 @@
   <!-- Custom styles for this template -->
   <link href="css/modern-business.css" rel="stylesheet">
   <link href="css/own-style.css" rel="stylesheet">
-
-<!--  <style type="text/css">-->
-<!--    #map-1{height:500px;width:40%;}-->
-<!--  </style>-->
 
 </head>
 
@@ -109,25 +105,21 @@
 
     <div>
       <div class="mGrid" style="display:inline-block">
-        <h5 class="my-text">自驾车路径规划</h5>
+        <h5 class="my-text">自驾车及出租车路径规划</h5>
       </div>
-      <div style="display:inline-block">
-        <h5 class="my-2">出租车路径规划</h5>
-      </div>
-      <div id="map-1"></div>
+      <div id="map-1">
+         <div id="panel1" ></div>
+       </div>
     </div>
 
     <br>
 
     <div>
       <div class="mGrid" style="display:inline-block">
-        <h5 class="my-2">公交车路径规划</h5>
-        <div id="map-2"></div>
+        <h5 class="my-text">公交车及地铁路径规划</h5>
       </div>
-      <div class="mSplit" style="display: inline-block"></div>
-      <div class="mGrid" style="display:inline-block">
-        <h5 class="my-2">地铁路径规划</h5>
-        <div id="map-3"></div>
+      <div id="map-2">
+        <div id="panel2" ></div>
       </div>
     </div>
 
@@ -135,24 +127,32 @@
 
     <div>
       <div class="mGrid" style="display:inline-block">
-        <h5 class="my-2">骑行路径规划</h5>
-        <div id="map-4"></div>
+        <h5 class="my-text">骑行路径规划</h5>
       </div>
-      <div class="mSplit" style="display: inline-block"></div>
-      <div class="mGrid" style="display:inline-block">
-        <h5 class="my-2">步行路径规划</h5>
-        <div id="map-5"></div>
+      <div id="map-4">
+        <div id="panel4" ></div>
       </div>
     </div>
 
+    <br>
+
+    <div>
+      <div class="mGrid" style="display:inline-block">
+        <h5 class="my-text">步行路径规划</h5>
+      </div>
+      <div id="map-5">
+        <div id="panel5" ></div>
+      </div>
     </div>
   </div>
+
+  <br>
   <!-- /.container -->
 
   <!-- Footer -->
   <footer class="py-5 bg-dark">
     <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+      <p class="m-0 text-center text-white">Copyright &copy; YuChen Chai 2019</p>
     </div>
     <!-- /.container -->
   </footer>
@@ -165,105 +165,140 @@
 
 </html>
 
-<script type="text/javascript">
-  // 百度地图API功能
 
 
-  var center_x=116.404;
-  var center_y=39.915;
-  var zoom=11;
-
-
-
-
-  var map1 = new BMap.Map("map-1");
-  map1.centerAndZoom(new BMap.Point(center_x, center_y), zoom);
-  //三种驾车策略：最少时间，最短距离，避开高速
-  var routePolicy1 = [BMAP_DRIVING_POLICY_LEAST_TIME,BMAP_DRIVING_POLICY_LEAST_DISTANCE,BMAP_DRIVING_POLICY_AVOID_HIGHWAYS];
+<script>
+  var mcity="北京";
+  var center_x=116.397428;
+  var center_y=39.90923;
   $("#result").click(function(){
-    map1.clearOverlays();
-    var i=$("#driving_way select").val();
-    var start = $("#Start").val();
-    var end = $("#End").val();
-    search(start,end,routePolicy1[i]);
-    function search(start,end,route){
-      var driving = new BMap.DrivingRoute(map1, {renderOptions:{map: map1, autoViewport: true},policy: route});
-      driving.search(start,end);
-    }
-  });
-
-  // 百度地图API功能
-  var map2 = new BMap.Map("map-2");
-  map2.centerAndZoom(new BMap.Point(center_x, center_y), zoom);
-
-  var routePolicy2 = [BMAP_TRANSIT_POLICY_LEAST_TIME,BMAP_TRANSIT_POLICY_LEAST_TRANSFER,BMAP_TRANSIT_POLICY_LEAST_WALKING,BMAP_TRANSIT_POLICY_AVOID_SUBWAYS];
-  var transit1 = new BMap.TransitRoute(map2, {
-    renderOptions: {map: map2},
-    policy: 0
-  });
-  $("#result").click(function(){
-    map2.clearOverlays();
-    var i=$("#driving_way select").val();
-    var start = $("#Start").val();
-    var end = $("#End").val();
-    search(start,end,routePolicy2[3]);
-    function search(start,end,route){
-      transit1.setPolicy(route);
-      transit1.search(start,end);
-    }
-  });
-
-  // 百度地图API功能
-  var map3 = new BMap.Map("map-3");
-  map3.centerAndZoom(new BMap.Point(center_x, center_y), zoom);
-
-  var routePolicy3 = [BMAP_TRANSIT_POLICY_LEAST_TIME,BMAP_TRANSIT_POLICY_LEAST_TRANSFER,BMAP_TRANSIT_POLICY_LEAST_WALKING,BMAP_TRANSIT_POLICY_AVOID_SUBWAYS];
-  var transit2 = new BMap.TransitRoute(map3, {
-    renderOptions: {map: map3},
-    policy: 0
-  });
-  $("#result").click(function(){
-    map3.clearOverlays();
-    var i=$("#driving_way select").val();
-    var start = $("#Start").val();
-    var end = $("#End").val();
-    search(start,end,routePolicy3[0]);
-    function search(start,end,route){
-      transit2.setPolicy(route);
-      transit2.search(start,end);
-    }
-  });
-
-
-
-
-  // 百度地图API功能
-  var map5 = new BMap.Map("map-5");
-  map5.centerAndZoom(new BMap.Point(center_x, center_y), zoom);
-  var walking = new BMap.WalkingRoute(map5, {renderOptions:{map: map5, autoViewport: true}});
   var start = $("#Start").val();
   var end = $("#End").val();
-
-
-  $("#result").click(function(){
-    map5.clearOverlays();
-    var start = $("#Start").val();
-    var end = $("#End").val();
-    walking.search(start,end);
   });
 </script>
 
-<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=XMImW1WMHFg9GnOxenPb480rcg2VjZ7r"></script>-->
-<!--<script type="text/javascript">-->
-<!--  var map4 = new BMap.Map("map-4");-->
-<!--  map4.centerAndZoom(new BMap.Point(center_x, center_y), zoom);-->
-<!--  var riding = new BMap.RidingRoute(map4, {-->
-<!--    renderOptions: {-->
-<!--      map: map4,-->
-<!--      autoViewport: true-->
-<!--    }-->
-<!--  });-->
-<!--  // var start1 = new BMap.Point(116.310791, 40.003419);-->
-<!--  // var end1 = new BMap.Point(116.386419, 40.003519);-->
-<!--  riding.search(start, end);-->
-<!--</script>-->
+<script type="text/javascript">
+  //基本地图加载
+  var map1 = new AMap.Map("map-1", {
+    resizeEnable: true,
+    center: [center_x, center_y],//地图中心点
+    zoom: 13 //地图显示的缩放级别
+  });
+  //构造路线导航类
+  var driving = new AMap.Driving({
+    map: map1,
+    panel: "panel1"
+  });
+
+  $("#result").click(function(){
+    var start = $("#Start").val();
+    var end = $("#End").val();
+    // 根据起终点名称规划驾车导航路线
+    driving.search([
+      {keyword: start,city:mcity},
+      {keyword: end,city:mcity}
+    ], function(status, result) {
+      // result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
+      if (status === 'complete') {
+        log.success('绘制驾车路线完成')
+      } else {
+        log.error('获取驾车数据失败：' + result)
+      }
+    });
+  });
+</script>
+
+<script type="text/javascript">
+  var map2 = new AMap.Map("map-2", {
+    resizeEnable: true,
+    center: [center_x, center_y],//地图中心点
+    zoom: 13
+  });
+  var transOptions = {
+    map: map2,
+    city: '北京市',
+    panel: 'panel2',
+    policy: AMap.TransferPolicy.LEAST_TIME //乘车策略
+  };
+  //构造公交换乘类
+  var transfer = new AMap.Transfer(transOptions);
+
+  $("#result").click(function(){
+    var start = $("#Start").val();
+    var end = $("#End").val();
+    //根据起、终点名称查询公交换乘路线
+    transfer.search([
+      {keyword: start,city:mcity},
+      //第一个元素city缺省时取transOptions的city属性
+      {keyword: end,city:mcity}
+      //第二个元素city缺省时取transOptions的cityd属性
+    ], function(status, result) {
+      // result即是对应的公交路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_TransferResult
+      if (status === 'complete') {
+        log.success('绘制公交路线完成')
+      } else {
+        log.error('公交路线数据查询失败' + result)
+      }
+    });
+  });
+
+</script>
+
+<script type="text/javascript">
+  var map = new AMap.Map("map-4", {
+    resizeEnable: true,
+    center: [center_x, center_y],//地图中心点
+    zoom: 13 //地图显示的缩放级别
+  });
+  //步行导航
+  var riding = new AMap.Riding({
+    map: map,
+    panel: "panel4"
+  });
+
+  $("#result").click(function(){
+    var start = $("#Start").val();
+    var end = $("#End").val();
+    riding.search([
+      {keyword: start,city:mcity},
+      {keyword: end,city:mcity}
+    ], function(status) {
+      // result即是对应的骑行路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_RidingResult
+      if (status === 'complete') {
+        log.success('绘制骑行路线完成')
+      } else {
+        log.error('骑行路线数据查询失败' + result)
+      }
+    });
+  });
+
+</script>
+
+<script type="text/javascript">
+  var map = new AMap.Map("map-5", {
+    resizeEnable: true,
+    center: [center_x, center_y],//地图中心点
+    zoom: 13 //地图显示的缩放级别
+  });
+  //步行导航
+  var walking = new AMap.Walking({
+    map: map,
+    panel: "panel5"
+  });
+  $("#result").click(function(){
+    var start = $("#Start").val();
+    var end = $("#End").val();
+    walking.search([
+      {keyword: start,city:mcity},
+      {keyword: end,city:mcity}
+    ], function(status, result) {
+      // result即是对应的步行路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_WalkingResult
+      if (status === 'complete') {
+        log.success('绘制步行路线完成')
+      } else {
+        log.error('步行路线数据查询失败' + result)
+      }
+    });
+  });
+
+</script>

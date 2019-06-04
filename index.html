@@ -28,6 +28,7 @@
   <!-- Navigation -->
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
+      <img src="resource/MIT_Logo.jpg" height="30px" style="padding-right: 5px">
       <a class="navbar-brand" href="index.html">郑东新区实验</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -103,6 +104,67 @@
     </div>
     <br>
 
+    <table id=mtable border="solid" width="100%" height="15px" cellspacing="0" cellpadding="5">
+      <thead>
+
+      <tr align="center" valign="center" bgcolor=#fefefe>
+        <th></th>
+        <th colspan="2">机动车</th>
+        <th></th>
+        <th colspan="3">公共交通</th>
+        <th></th>
+        <th colspan="2">骑行/走路</th>
+      </tr>
+      <tr align="center" valign="center" bgcolor=#fefefe>
+        <th></th>
+        <th>自驾车</th>
+        <th>出租车</th>
+        <th></th>
+        <th>公交车</th>
+        <th>地铁</th>
+        <th>步行</th>
+        <th></th>
+        <th>骑行</th>
+        <th>步行</th>
+      </tr>
+      </thead>
+
+      <tr align="center" valign="center" bgcolor=#fefefe>
+        <th>时间(分钟)</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td colspan="3"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr align="center" valign="center" bgcolor=#fefefe>
+        <th>距离(公里)</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr align="center" valign="center" bgcolor=#fefefe>
+        <th>成本(元)</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td colspan="3"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+
+    </table>
+
+    <br>
     <div>
       <div class="mGrid" style="display:inline-block">
         <h5 class="my-text">自驾车及出租车路径规划</h5>
@@ -168,13 +230,24 @@
 
 
 <script>
-  var mcity="北京";
-  var center_x=116.397428;
-  var center_y=39.90923;
+  var mcity="郑州";
+  var center_x=113.657413;
+  var center_y=34.867203;
   $("#result").click(function(){
   var start = $("#Start").val();
   var end = $("#End").val();
   });
+</script>
+<script type="text/javascript">
+TaxiPrice=function(dis,time){
+  if(dis<=2)
+    return 8;
+  else if(dis<=12)
+    return (8+(dis-2)*1.5).toFixed(1);
+  else
+    // console.log((8+15+(dis-12)*2.25).toFixed(1))
+    return (8+15+(dis-12)*2.25).toFixed(1);
+}
 </script>
 
 <script type="text/javascript">
@@ -191,15 +264,34 @@
   });
 
   $("#result").click(function(){
+
     var start = $("#Start").val();
     var end = $("#End").val();
     // 根据起终点名称规划驾车导航路线
     driving.search([
-      {keyword: start,city:mcity},
-      {keyword: end,city:mcity}
+      {keyword: start,city:mcity,extensions:"all"},
+      {keyword: end,city:mcity,extensions:"all"},
+
     ], function(status, result) {
       // result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
       if (status === 'complete') {
+        // console.log(result);
+        var tb=document.getElementById("mtable");
+        var t=Math.round(result.routes[0].time/60);
+        var dist=(result.routes[0].distance/1000).toFixed(1);
+
+        var td=tb.rows[2].cells[1];
+        td.innerHTML=t;
+        var td=tb.rows[3].cells[1];
+        td.innerHTML=dist;
+
+        var td=tb.rows[2].cells[2];
+        td.innerHTML=t;
+        var td=tb.rows[3].cells[2];
+        td.innerHTML=dist;
+
+        var td=tb.rows[4].cells[2];
+        td.innerHTML=TaxiPrice(dist,t);
         log.success('绘制驾车路线完成')
       } else {
         log.error('获取驾车数据失败：' + result)
@@ -216,7 +308,7 @@
   });
   var transOptions = {
     map: map2,
-    city: '北京市',
+    city: mcity,
     panel: 'panel2',
     policy: AMap.TransferPolicy.LEAST_TIME //乘车策略
   };
@@ -233,8 +325,29 @@
       {keyword: end,city:mcity}
       //第二个元素city缺省时取transOptions的cityd属性
     ], function(status, result) {
+
       // result即是对应的公交路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_TransferResult
       if (status === 'complete') {
+        // console.log(result);
+        var tb=document.getElementById("mtable");
+        var t=Math.round(result.plans[0].time/60);
+        var bus_dist=(result.plans[0].transit_distance/1000).toFixed(1);
+        var railway_dist=(result.plans[0].railway_distance/1000).toFixed(1);
+        var walk_dist=(result.plans[0].walking_distance/1000).toFixed(1);
+        var c=Math.round(result.plans[0].cost);
+
+        var td=tb.rows[2].cells[4];
+        td.innerHTML=t;
+
+        var td=tb.rows[3].cells[4];
+        td.innerHTML=bus_dist;
+        var td=tb.rows[3].cells[5];
+        td.innerHTML=railway_dist;
+        var td=tb.rows[3].cells[6];
+        td.innerHTML=walk_dist;
+
+        var td=tb.rows[4].cells[4];
+        td.innerHTML=c;
         log.success('绘制公交路线完成')
       } else {
         log.error('公交路线数据查询失败' + result)
@@ -247,7 +360,7 @@
 <script type="text/javascript">
   var map = new AMap.Map("map-4", {
     resizeEnable: true,
-    center: [center_x, center_y],//地图中心点
+    center: [center_x,center_y],//地图中心点
     zoom: 13 //地图显示的缩放级别
   });
   //步行导航
@@ -260,18 +373,26 @@
     var start = $("#Start").val();
     var end = $("#End").val();
     riding.search([
-      {keyword: start,city:mcity},
+      {keyword:start,city:mcity},
       {keyword: end,city:mcity}
-    ], function(status) {
+    ], function(status,result) {
       // result即是对应的骑行路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_RidingResult
       if (status === 'complete') {
+        // console.log(result);
+        var tb=document.getElementById("mtable");
+        var t=Math.round(result.routes[0].time/60);
+        var dist=(result.routes[0].distance/1000).toFixed(1);
+
+        var td=tb.rows[2].cells[6];
+        td.innerHTML=t;
+        var td=tb.rows[3].cells[8];
+        td.innerHTML=dist;
         log.success('绘制骑行路线完成')
       } else {
         log.error('骑行路线数据查询失败' + result)
       }
     });
   });
-
 </script>
 
 <script type="text/javascript">
@@ -294,6 +415,16 @@
     ], function(status, result) {
       // result即是对应的步行路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_WalkingResult
       if (status === 'complete') {
+        // console.log(result);
+        var tb=document.getElementById("mtable");
+        var t=Math.round(result.routes[0].time/60);
+        var dist=(result.routes[0].distance/1000).toFixed(1);
+
+        var td=tb.rows[2].cells[7];
+        td.innerHTML=t;
+        var td=tb.rows[3].cells[9];
+        td.innerHTML=dist;
+
         log.success('绘制步行路线完成')
       } else {
         log.error('步行路线数据查询失败' + result)

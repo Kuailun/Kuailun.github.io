@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="YuChen Chai">
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XMImW1WMHFg9GnOxenPb480rcg2VjZ7r"></script>
+
+  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+
+  <title>欢迎来到郑东新区实验——一个MIT的城市实验</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+  <!-- Custom styles for this template -->
+  <link href="css/modern-business.css" rel="stylesheet">
+  <link href="css/own-style.css" rel="stylesheet">
+
+<!--  <style type="text/css">-->
+<!--    #map-1{height:500px;width:40%;}-->
+<!--  </style>-->
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">郑东新区实验</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">关于实验</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">团队成员</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">联系我们</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header>
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner" role="listbox">
+        <!-- Slide One - Set the background image for this slide in the line below -->
+        <div class="carousel-item active" style="background-image: url('./resource/Display-Slide-1.jpg')">
+          <div class="carousel-caption d-none d-md-block">
+            <h3>First Slide</h3>
+            <p>This is a description for the first slide.</p>
+          </div>
+        </div>
+<!--         Slide Two - Set the background image for this slide in the line below -->
+        <div class="carousel-item" style="background-image: url('./resource/Display-Slide-2.jpg')">
+          <div class="carousel-caption d-none d-md-block">
+            <h3>Second Slide</h3>
+            <p>This is a description for the second slide.</p>
+          </div>
+        </div>
+        <!-- Slide Three - Set the background image for this slide in the line below -->
+        <div class="carousel-item" style="background-image: url('./resource/Display-Slide-3.jpg')">
+          <div class="carousel-caption d-none d-md-block">
+            <h3>Third Slide</h3>
+            <p>This is a description for the third slide.</p>
+          </div>
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+
+  <div class="container">
+    <h1 class="my-2">欢迎参与郑东新区实验！</h1>
+    <h5 class="my-2">我们将根据你的起始位置和终点位置，为你提供各种可行方案以供参考</h5>
+    <br>
+    <div style="width:520px;height:34px;">
+      <input id="Start" type="text" placeholder="起点"  style="height:25px"/>
+      <input id="End" type="text" placeholder="终点"  style="height:25px"/>
+      <input type="button" id="result" value="查询"/>
+<!--      <a class="mButton" href="#">查询</a> -->
+    </div>
+    <br>
+
+    <div>
+      <div class="mGrid" style="display:inline-block">
+        <h5 class="my-text">自驾车路径规划</h5>
+      </div>
+      <div style="display:inline-block">
+        <h5 class="my-2">出租车路径规划</h5>
+      </div>
+      <div id="map-1"></div>
+    </div>
+
+    <br>
+
+    <div>
+      <div class="mGrid" style="display:inline-block">
+        <h5 class="my-2">公交车路径规划</h5>
+        <div id="map-2"></div>
+      </div>
+      <div class="mSplit" style="display: inline-block"></div>
+      <div class="mGrid" style="display:inline-block">
+        <h5 class="my-2">地铁路径规划</h5>
+        <div id="map-3"></div>
+      </div>
+    </div>
+
+    <br>
+
+    <div>
+      <div class="mGrid" style="display:inline-block">
+        <h5 class="my-2">骑行路径规划</h5>
+        <div id="map-4"></div>
+      </div>
+      <div class="mSplit" style="display: inline-block"></div>
+      <div class="mGrid" style="display:inline-block">
+        <h5 class="my-2">步行路径规划</h5>
+        <div id="map-5"></div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
+
+<script type="text/javascript">
+  // 百度地图API功能
+
+
+  var center_x=116.404;
+  var center_y=39.915;
+  var zoom=11;
+
+
+
+
+  var map1 = new BMap.Map("map-1");
+  map1.centerAndZoom(new BMap.Point(center_x, center_y), zoom);
+  //三种驾车策略：最少时间，最短距离，避开高速
+  var routePolicy1 = [BMAP_DRIVING_POLICY_LEAST_TIME,BMAP_DRIVING_POLICY_LEAST_DISTANCE,BMAP_DRIVING_POLICY_AVOID_HIGHWAYS];
+  $("#result").click(function(){
+    map1.clearOverlays();
+    var i=$("#driving_way select").val();
+    var start = $("#Start").val();
+    var end = $("#End").val();
+    search(start,end,routePolicy1[i]);
+    function search(start,end,route){
+      var driving = new BMap.DrivingRoute(map1, {renderOptions:{map: map1, autoViewport: true},policy: route});
+      driving.search(start,end);
+    }
+  });
+
+  // 百度地图API功能
+  var map2 = new BMap.Map("map-2");
+  map2.centerAndZoom(new BMap.Point(center_x, center_y), zoom);
+
+  var routePolicy2 = [BMAP_TRANSIT_POLICY_LEAST_TIME,BMAP_TRANSIT_POLICY_LEAST_TRANSFER,BMAP_TRANSIT_POLICY_LEAST_WALKING,BMAP_TRANSIT_POLICY_AVOID_SUBWAYS];
+  var transit1 = new BMap.TransitRoute(map2, {
+    renderOptions: {map: map2},
+    policy: 0
+  });
+  $("#result").click(function(){
+    map2.clearOverlays();
+    var i=$("#driving_way select").val();
+    var start = $("#Start").val();
+    var end = $("#End").val();
+    search(start,end,routePolicy2[3]);
+    function search(start,end,route){
+      transit1.setPolicy(route);
+      transit1.search(start,end);
+    }
+  });
+
+  // 百度地图API功能
+  var map3 = new BMap.Map("map-3");
+  map3.centerAndZoom(new BMap.Point(center_x, center_y), zoom);
+
+  var routePolicy3 = [BMAP_TRANSIT_POLICY_LEAST_TIME,BMAP_TRANSIT_POLICY_LEAST_TRANSFER,BMAP_TRANSIT_POLICY_LEAST_WALKING,BMAP_TRANSIT_POLICY_AVOID_SUBWAYS];
+  var transit2 = new BMap.TransitRoute(map3, {
+    renderOptions: {map: map3},
+    policy: 0
+  });
+  $("#result").click(function(){
+    map3.clearOverlays();
+    var i=$("#driving_way select").val();
+    var start = $("#Start").val();
+    var end = $("#End").val();
+    search(start,end,routePolicy3[0]);
+    function search(start,end,route){
+      transit2.setPolicy(route);
+      transit2.search(start,end);
+    }
+  });
+
+
+
+
+  // 百度地图API功能
+  var map5 = new BMap.Map("map-5");
+  map5.centerAndZoom(new BMap.Point(center_x, center_y), zoom);
+  var walking = new BMap.WalkingRoute(map5, {renderOptions:{map: map5, autoViewport: true}});
+  var start = $("#Start").val();
+  var end = $("#End").val();
+
+
+  $("#result").click(function(){
+    map5.clearOverlays();
+    var start = $("#Start").val();
+    var end = $("#End").val();
+    walking.search(start,end);
+  });
+</script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=XMImW1WMHFg9GnOxenPb480rcg2VjZ7r"></script>-->
+<!--<script type="text/javascript">-->
+<!--  var map4 = new BMap.Map("map-4");-->
+<!--  map4.centerAndZoom(new BMap.Point(center_x, center_y), zoom);-->
+<!--  var riding = new BMap.RidingRoute(map4, {-->
+<!--    renderOptions: {-->
+<!--      map: map4,-->
+<!--      autoViewport: true-->
+<!--    }-->
+<!--  });-->
+<!--  // var start1 = new BMap.Point(116.310791, 40.003419);-->
+<!--  // var end1 = new BMap.Point(116.386419, 40.003519);-->
+<!--  riding.search(start, end);-->
+<!--</script>-->

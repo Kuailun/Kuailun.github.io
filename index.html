@@ -96,9 +96,10 @@
     <h1 class="my-2">欢迎参与郑东新区实验！</h1>
     <h5 class="my-2">我们将根据你的起始位置和终点位置，为你提供各种可行方案以供参考</h5>
     <br>
-    <div style="width:520px;height:34px;">
-      <input id="Start" type="text" placeholder="起点"  style="height:25px"/>
-      <input id="End" type="text" placeholder="终点"  style="height:25px"/>
+    <div style="width:720px;height:34px;">
+      <input id="QuestionID" type="text" placeholder="问卷ID"  style="height:25px;width:220px"/>
+      <input id="Start" type="text" placeholder="起点"  style="height:25px;width:220px"/>
+      <input id="End" type="text" placeholder="终点"  style="height:25px;width:220px"/>
       <input type="button" id="result" value="查询"/>
 <!--      <a class="mButton" href="#">查询</a> -->
     </div>
@@ -134,7 +135,9 @@
         <td></td>
         <td></td>
         <td></td>
-        <td colspan="3"></td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -233,11 +236,244 @@
   var mcity="郑州";
   var center_x=113.657413;
   var center_y=34.867203;
+  var QueryCode={
+    LocalSearch:1,
+    SendPost:2,
+    PostDelete:3,
+  }
+  var mJsonData={};
+
   $("#result").click(function(){
+    mJsonData={};
+    mJsonData["Driving"]={"Self":{},"Taxi":{}};
+    mJsonData["Transfer"]={"Bus":{},"Subway":{},"Walk":{}};
+    mJsonData["Ride"]={"Walk":{},"Ride":{}};
   var start = $("#Start").val();
   var end = $("#End").val();
+  var questionID = $("#QuestionID").val();
+
+  console.log(start);
+  var sendPost=QueryCode.SendPost;
+
+  if(questionID==""&&start==""&&end=="")
+  {
+    return;
+  }
+  else if(questionID=="")
+  {
+    sendPost=QueryCode.LocalSearch;
+  }
+  else if(start==""&&end=="")
+  {
+    sendPost=QueryCode.PostDelete;
+  }
+  else
+  {
+    sendPost=QueryCode.SendPost;
+  }
+
+    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
+    //自驾车API处理
+    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
+    driving.search([
+      {keyword: start,city:mcity,extensions:"all"},
+      {keyword: end,city:mcity,extensions:"all"},
+
+    ], function(status, result) {
+      // result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
+      if (status === 'complete') {
+        // console.log(result);
+        var tb=document.getElementById("mtable");
+        var t=Math.round(result.routes[0].time/60);
+        var dist=(result.routes[0].distance/1000).toFixed(1);
+
+        var td=tb.rows[2].cells[1];
+        td.innerHTML=t;
+        var td=tb.rows[3].cells[1];
+        td.innerHTML=dist;
+
+        var td=tb.rows[2].cells[2];
+        td.innerHTML=t;
+        var td=tb.rows[3].cells[2];
+        td.innerHTML=dist;
+
+        mJsonData["Driving"]["Self"]["Time"]=t;
+        mJsonData["Driving"]["Self"]["Distance"]=parseFloat(dist);
+
+        mJsonData["Driving"]["Taxi"]["Time"]=t;
+        mJsonData["Driving"]["Taxi"]["Distance"]=parseFloat(dist);
+
+
+        log.success('绘制驾车路线完成')
+      } else {
+        log.error('获取驾车数据失败：' + result)
+      }
+    });
+
+    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
+    //公共交通API处理
+    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
+    transfer.search([
+      {keyword: start,city:mcity},
+      //第一个元素city缺省时取transOptions的city属性
+      {keyword: end,city:mcity}
+      //第二个元素city缺省时取transOptions的cityd属性
+    ], function(status, result) {
+
+      // result即是对应的公交路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_TransferResult
+      if (status === 'complete') {
+         console.log(result);
+        var tb=document.getElementById("mtable");
+        var t=Math.round(result.plans[0].time/60);
+
+        var bus_dist=0;
+        var subway_dist=0;
+        var walk_dist=0;
+        var bus_t=0;
+        var subway_t=0;
+        var walk_t=0;
+
+        var mPlan=result.plans[0].segments;
+        for(var i=0;i<mPlan.length;i++)
+        {
+          switch(mPlan[i].transit_mode)
+          {
+            case "WALK":
+              walk_dist=walk_dist+mPlan[i].distance;
+              walk_t=walk_t+mPlan[i].time;
+              break;
+            case "SUBWAY":
+              subway_dist=subway_dist+mPlan[i].distance;
+              subway_t=subway_t+mPlan[i].time;
+              break;
+            case "BUS":
+              bus_dist=bus_dist+mPlan[i].distance;
+              bus_t=bus_t+mPlan[i].time;
+              break;
+          }
+        }
+        bus_dist=(bus_dist/1000).toFixed(1);
+        subway_dist=(subway_dist/1000).toFixed(1);
+        walk_dist=(walk_dist/1000).toFixed(1);
+
+        bus_t=Math.round(bus_t/60);
+        subway_t=Math.round(subway_t/60);
+        walk_t=Math.round(walk_t/60);
+
+        var c=Math.round(result.plans[0].cost);
+
+        var td=tb.rows[2].cells[4];
+        td.innerHTML=bus_t;
+        var td=tb.rows[2].cells[5];
+        td.innerHTML=subway_t;
+        var td=tb.rows[2].cells[6];
+        td.innerHTML=walk_t;
+
+        var td=tb.rows[3].cells[4];
+        td.innerHTML=bus_dist;
+        var td=tb.rows[3].cells[5];
+        td.innerHTML=subway_dist;
+        var td=tb.rows[3].cells[6];
+        td.innerHTML=walk_dist;
+
+        var td=tb.rows[4].cells[4];
+        td.innerHTML=c;
+
+        var td=tb.rows[4].cells[2];
+        td.innerHTML=result.taxi_cost;
+
+        mJsonData["Driving"]["Taxi"]["Cost"]=result.taxi_cost;
+
+        mJsonData["Transfer"]["Time"]=t;
+        mJsonData["Transfer"]["Cost"]=c;
+        mJsonData["Transfer"]["Bus"]["Dist"]=bus_dist;
+        mJsonData["Transfer"]["Subway"]["Dist"]=subway_dist;
+        mJsonData["Transfer"]["Walk"]["Dist"]=walk_dist;
+
+
+        log.success('绘制公交路线完成')
+      } else {
+        log.error('公交路线数据查询失败' + result)
+      }
+    });
+
+    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
+    //骑行API处理
+    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
+    riding.search([
+      {keyword:start,city:mcity},
+      {keyword: end,city:mcity}
+    ], function(status,result) {
+      // result即是对应的骑行路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_RidingResult
+      if (status === 'complete') {
+        // console.log(result);
+        var tb=document.getElementById("mtable");
+        var t=Math.round(result.routes[0].time/60);
+        var dist=(result.routes[0].distance/1000).toFixed(1);
+
+        var td=tb.rows[2].cells[8];
+        td.innerHTML=t;
+        var td=tb.rows[3].cells[8];
+        td.innerHTML=dist;
+
+        mJsonData["Ride"]["Ride"]["Dist"]=dist;
+        mJsonData["Ride"]["Ride"]["Time"]=t;
+
+        log.success('绘制骑行路线完成')
+      } else {
+        log.error('骑行路线数据查询失败' + result)
+      }
+    });
+
+    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
+    //步行API处理
+    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
+    walking.search([
+      {keyword: start,city:mcity},
+      {keyword: end,city:mcity}
+    ], function(status, result) {
+      // result即是对应的步行路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_WalkingResult
+      if (status === 'complete') {
+        // console.log(result);
+        var tb=document.getElementById("mtable");
+        var t=Math.round(result.routes[0].time/60);
+        var dist=(result.routes[0].distance/1000).toFixed(1);
+
+        var td=tb.rows[2].cells[9];
+        td.innerHTML=t;
+        var td=tb.rows[3].cells[9];
+        td.innerHTML=dist;
+
+        mJsonData["Ride"]["Walk"]["Dist"]=dist;
+        mJsonData["Ride"]["Walk"]["Time"]=t;
+
+        log.success('绘制步行路线完成')
+      } else {
+        log.error('步行路线数据查询失败' + result)
+      }
+    });
+
+    mJsonData["QueryCode"]=sendPost;
+    console.log(mJsonData);
+
+
+
+
+    sendData=function(){
+      var mdata=JSON.stringify(mJsonData);
+      console.log(mdata)
+      $.post("http://localhost:8000/",mdata,function(data,status){
+        console.log(data)
+      })
+    }
+
+    setTimeout(sendData,5000);
+
+
+
   });
 </script>
+
 <script type="text/javascript">
 TaxiPrice=function(dis,time){
   if(dis<=2)
@@ -262,41 +498,6 @@ TaxiPrice=function(dis,time){
     map: map1,
     panel: "panel1"
   });
-  console.log(driving)
-  $("#result").click(function(){
-
-    var start = $("#Start").val();
-    var end = $("#End").val();
-    // 根据起终点名称规划驾车导航路线
-    driving.search([
-      {keyword: start,city:mcity,extensions:"all"},
-      {keyword: end,city:mcity,extensions:"all"},
-
-    ], function(status, result) {
-      // result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
-      if (status === 'complete') {
-        // console.log(result);
-        var tb=document.getElementById("mtable");
-        var t=Math.round(result.routes[0].time/60);
-        var dist=(result.routes[0].distance/1000).toFixed(1);
-
-        var td=tb.rows[2].cells[1];
-        td.innerHTML=t;
-        var td=tb.rows[3].cells[1];
-        td.innerHTML=dist;
-
-        var td=tb.rows[2].cells[2];
-        td.innerHTML=t;
-        var td=tb.rows[3].cells[2];
-        td.innerHTML=dist;
-
-
-        log.success('绘制驾车路线完成')
-      } else {
-        log.error('获取驾车数据失败：' + result)
-      }
-    });
-  });
 </script>
 
 <script type="text/javascript">
@@ -310,55 +511,10 @@ TaxiPrice=function(dis,time){
     city: mcity,
     panel: 'panel2',
     policy: AMap.TransferPolicy.LEAST_TIME //乘车策略
+    // policy: AMap.TransferPolicy.NO_SUBWAY //乘车策略
   };
   //构造公交换乘类
   var transfer = new AMap.Transfer(transOptions);
-  console.log(transfer)
-
-  $("#result").click(function(){
-    var start = $("#Start").val();
-    var end = $("#End").val();
-    transfer.leaveAt("8:00","8:00");
-    //根据起、终点名称查询公交换乘路线
-    transfer.search([
-      {keyword: start,city:mcity},
-      //第一个元素city缺省时取transOptions的city属性
-      {keyword: end,city:mcity}
-      //第二个元素city缺省时取transOptions的cityd属性
-    ], function(status, result) {
-
-      // result即是对应的公交路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_TransferResult
-      if (status === 'complete') {
-        console.log(result);
-        // console.log(result);
-        var tb=document.getElementById("mtable");
-        var t=Math.round(result.plans[0].time/60);
-        var bus_dist=(result.plans[0].transit_distance/1000).toFixed(1);
-        var railway_dist=(result.plans[0].railway_distance/1000).toFixed(1);
-        var walk_dist=(result.plans[0].walking_distance/1000).toFixed(1);
-        var c=Math.round(result.plans[0].cost);
-
-        var td=tb.rows[2].cells[4];
-        td.innerHTML=t;
-
-        var td=tb.rows[3].cells[4];
-        td.innerHTML=bus_dist;
-        var td=tb.rows[3].cells[5];
-        td.innerHTML=railway_dist;
-        var td=tb.rows[3].cells[6];
-        td.innerHTML=walk_dist;
-
-        var td=tb.rows[4].cells[4];
-        td.innerHTML=c;
-
-        var td=tb.rows[4].cells[2];
-        td.innerHTML=result.taxi_cost;
-        log.success('绘制公交路线完成')
-      } else {
-        log.error('公交路线数据查询失败' + result)
-      }
-    });
-  });
 
 </script>
 
@@ -372,31 +528,6 @@ TaxiPrice=function(dis,time){
   var riding = new AMap.Riding({
     map: map,
     panel: "panel4"
-  });
-
-  $("#result").click(function(){
-    var start = $("#Start").val();
-    var end = $("#End").val();
-    riding.search([
-      {keyword:start,city:mcity},
-      {keyword: end,city:mcity}
-    ], function(status,result) {
-      // result即是对应的骑行路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_RidingResult
-      if (status === 'complete') {
-        // console.log(result);
-        var tb=document.getElementById("mtable");
-        var t=Math.round(result.routes[0].time/60);
-        var dist=(result.routes[0].distance/1000).toFixed(1);
-
-        var td=tb.rows[2].cells[6];
-        td.innerHTML=t;
-        var td=tb.rows[3].cells[8];
-        td.innerHTML=dist;
-        log.success('绘制骑行路线完成')
-      } else {
-        log.error('骑行路线数据查询失败' + result)
-      }
-    });
   });
 </script>
 
@@ -412,29 +543,7 @@ TaxiPrice=function(dis,time){
     panel: "panel5"
   });
   $("#result").click(function(){
-    var start = $("#Start").val();
-    var end = $("#End").val();
-    walking.search([
-      {keyword: start,city:mcity},
-      {keyword: end,city:mcity}
-    ], function(status, result) {
-      // result即是对应的步行路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_WalkingResult
-      if (status === 'complete') {
-        // console.log(result);
-        var tb=document.getElementById("mtable");
-        var t=Math.round(result.routes[0].time/60);
-        var dist=(result.routes[0].distance/1000).toFixed(1);
 
-        var td=tb.rows[2].cells[7];
-        td.innerHTML=t;
-        var td=tb.rows[3].cells[9];
-        td.innerHTML=dist;
-
-        log.success('绘制步行路线完成')
-      } else {
-        log.error('步行路线数据查询失败' + result)
-      }
-    });
   });
 
 </script>

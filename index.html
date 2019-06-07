@@ -262,7 +262,7 @@ TaxiPrice=function(dis,time){
     map: map1,
     panel: "panel1"
   });
-
+  console.log(driving)
   $("#result").click(function(){
 
     var start = $("#Start").val();
@@ -290,8 +290,7 @@ TaxiPrice=function(dis,time){
         var td=tb.rows[3].cells[2];
         td.innerHTML=dist;
 
-        var td=tb.rows[4].cells[2];
-        td.innerHTML=TaxiPrice(dist,t);
+
         log.success('绘制驾车路线完成')
       } else {
         log.error('获取驾车数据失败：' + result)
@@ -314,10 +313,12 @@ TaxiPrice=function(dis,time){
   };
   //构造公交换乘类
   var transfer = new AMap.Transfer(transOptions);
+  console.log(transfer)
 
   $("#result").click(function(){
     var start = $("#Start").val();
     var end = $("#End").val();
+    transfer.leaveAt("8:00","8:00");
     //根据起、终点名称查询公交换乘路线
     transfer.search([
       {keyword: start,city:mcity},
@@ -328,6 +329,7 @@ TaxiPrice=function(dis,time){
 
       // result即是对应的公交路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_TransferResult
       if (status === 'complete') {
+        console.log(result);
         // console.log(result);
         var tb=document.getElementById("mtable");
         var t=Math.round(result.plans[0].time/60);
@@ -348,6 +350,9 @@ TaxiPrice=function(dis,time){
 
         var td=tb.rows[4].cells[4];
         td.innerHTML=c;
+
+        var td=tb.rows[4].cells[2];
+        td.innerHTML=result.taxi_cost;
         log.success('绘制公交路线完成')
       } else {
         log.error('公交路线数据查询失败' + result)

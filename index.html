@@ -96,10 +96,16 @@
     <h1 class="my-2">欢迎参与郑东新区实验！</h1>
     <h5 class="my-2">我们将根据你的起始位置和终点位置，为你提供各种可行方案以供参考</h5>
     <br>
-    <div style="width:720px;height:34px;">
+    <div style="width:1000px;height:34px;">
       <input id="QuestionID" type="text" placeholder="问卷ID"  style="height:25px;width:220px"/>
       <input id="Start" type="text" placeholder="起点"  style="height:25px;width:220px"/>
       <input id="End" type="text" placeholder="终点"  style="height:25px;width:220px"/>
+      <select class="mSelect" id="MSelect" onchange="getValue()"   style="height:25px;width: 220px">
+        <option value ="0">无附加功能</option>
+        <option value ="1">卡路里消耗</option>
+        <option value="2">温室气体</option>
+        <option value="3">污染暴露</option>
+      </select>
       <input type="button" id="result" value="查询"/>
 <!--      <a class="mButton" href="#">查询</a> -->
     </div>
@@ -160,6 +166,54 @@
         <td></td>
         <td></td>
         <td colspan="3"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr id="Options1" align="center" valign="center" bgcolor=#fefefe style="visibility: hidden">
+        <th>卡路里消耗(卡)</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr id="Options2" align="center" valign="center" bgcolor=#fefefe style="visibility: hidden">
+        <th>温室气体(克)</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr id="Options3" align="center" valign="center" bgcolor=#fefefe style="visibility: hidden">
+        <th>PM2.5暴露量(微克/立方米*分钟)</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr id="Options4" align="center" valign="center" bgcolor=#fefefe style="visibility: hidden">
+        <th>等价吸烟数量(根)</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -241,7 +295,44 @@
     SendPost:2,
     PostDelete:3,
   }
+  var selectValue=0;
   var mJsonData={};
+  var options={};
+  options["Health"]={};
+  options["Health"]["Private"]=0;
+  options["Health"]["Taxi"]=0;
+  options["Health"]["TBus"]=0;
+  options["Health"]["TSubway"]=0;
+  options["Health"]["TWalk"]=0;
+  options["Health"]["Bike"]=0;
+  options["Health"]["Walk"]=0;
+
+  options["Social"]={};
+  options["Social"]["Private"]=0;
+  options["Social"]["Taxi"]=0;
+  options["Social"]["TBus"]=0;
+  options["Social"]["TSubway"]=0;
+  options["Social"]["TWalk"]=0;
+  options["Social"]["Bike"]=0;
+  options["Social"]["Walk"]=0;
+
+  options["Pollution1"]={};
+  options["Pollution1"]["Private"]=0;
+  options["Pollution1"]["Taxi"]=0;
+  options["Pollution1"]["TBus"]=0;
+  options["Pollution1"]["TSubway"]=0;
+  options["Pollution1"]["TWalk"]=0;
+  options["Pollution1"]["Bike"]=0;
+  options["Pollution1"]["Walk"]=0;
+
+  options["Pollution2"]={};
+  options["Pollution2"]["Private"]=0;
+  options["Pollution2"]["Taxi"]=0;
+  options["Pollution2"]["TBus"]=0;
+  options["Pollution2"]["TSubway"]=0;
+  options["Pollution2"]["TWalk"]=0;
+  options["Pollution2"]["Bike"]=0;
+  options["Pollution2"]["Walk"]=0;
 
   $("#result").click(function(){
     mJsonData={};
@@ -251,6 +342,8 @@
   var start = $("#Start").val();
   var end = $("#End").val();
   var questionID = $("#QuestionID").val();
+
+  mJsonData["Id"]=questionID;
 
   console.log(start);
   var sendPost=QueryCode.SendPost;
@@ -291,11 +384,27 @@
         td.innerHTML=t;
         var td=tb.rows[3].cells[1];
         td.innerHTML=dist;
+        var td=tb.rows[5].cells[1];
+        td.innerHTML=(dist*3.5).toFixed(1);
+        var td=tb.rows[6].cells[1];
+        td.innerHTML=(dist*270.57).toFixed(1);
+        var td=tb.rows[7].cells[1];
+        td.innerHTML=(t*0.152*200).toFixed(1);
+        var td=tb.rows[8].cells[1];
+        td.innerHTML=(t*0.152*200/22/24/60).toFixed(2);
 
         var td=tb.rows[2].cells[2];
         td.innerHTML=t;
         var td=tb.rows[3].cells[2];
         td.innerHTML=dist;
+        var td=tb.rows[5].cells[2];
+        td.innerHTML=(dist*3.5).toFixed(1);
+        var td=tb.rows[6].cells[2];
+        td.innerHTML=(dist*270.57).toFixed(1);
+        var td=tb.rows[7].cells[2];
+        td.innerHTML=(t*0.152*200).toFixed(1);
+        var td=tb.rows[8].cells[2];
+        td.innerHTML=(t*0.152*200/22/24/60).toFixed(2);
 
         mJsonData["Driving"]["Self"]["Time"]=t;
         mJsonData["Driving"]["Self"]["Distance"]=parseFloat(dist);
@@ -364,17 +473,42 @@
 
         var td=tb.rows[2].cells[4];
         td.innerHTML=bus_t;
-        var td=tb.rows[2].cells[5];
-        td.innerHTML=subway_t;
-        var td=tb.rows[2].cells[6];
-        td.innerHTML=walk_t;
-
         var td=tb.rows[3].cells[4];
         td.innerHTML=bus_dist;
+        var td=tb.rows[5].cells[4];
+        td.innerHTML=(bus_dist*5).toFixed(1);
+        var td=tb.rows[6].cells[4];
+        td.innerHTML=(bus_dist*180.38).toFixed(1);
+        var td=tb.rows[7].cells[4];
+        td.innerHTML=(bus_t*0.72*200).toFixed(1);
+        var td=tb.rows[8].cells[4];
+        td.innerHTML=(bus_t*0.72*200/22/24/60).toFixed(2);
+
+        var td=tb.rows[2].cells[5];
+        td.innerHTML=subway_t;
         var td=tb.rows[3].cells[5];
         td.innerHTML=subway_dist;
+        var td=tb.rows[5].cells[5];
+        td.innerHTML=(subway_dist*5).toFixed(1);
+        var td=tb.rows[6].cells[5];
+        td.innerHTML=(subway_dist*101.466).toFixed(1);
+        var td=tb.rows[7].cells[5];
+        td.innerHTML=(subway_t*0.3283*200).toFixed(1);
+        var td=tb.rows[8].cells[5];
+        td.innerHTML=(subway_t*0.3283*200/22/24/60).toFixed(2);
+
+        var td=tb.rows[2].cells[6];
+        td.innerHTML=walk_t;
         var td=tb.rows[3].cells[6];
         td.innerHTML=walk_dist;
+        var td=tb.rows[5].cells[6];
+        td.innerHTML=(walk_dist*73).toFixed(1);
+        var td=tb.rows[6].cells[6];
+        td.innerHTML=(walk_dist*0).toFixed(1);
+        var td=tb.rows[7].cells[6];
+        td.innerHTML=(walk_t*1*200).toFixed(1);
+        var td=tb.rows[8].cells[6];
+        td.innerHTML=(walk_t*1*200/22/24/60).toFixed(2);
 
         var td=tb.rows[4].cells[4];
         td.innerHTML=c;
@@ -415,6 +549,14 @@
         td.innerHTML=t;
         var td=tb.rows[3].cells[8];
         td.innerHTML=dist;
+        var td=tb.rows[5].cells[8];
+        td.innerHTML=(dist*30).toFixed(1);
+        var td=tb.rows[6].cells[8];
+        td.innerHTML=(dist*0).toFixed(1);
+        var td=tb.rows[7].cells[8];
+        td.innerHTML=(t*1*200).toFixed(1);
+        var td=tb.rows[8].cells[8];
+        td.innerHTML=(t*1*200/22/24/60).toFixed(2);
 
         mJsonData["Ride"]["Ride"]["Dist"]=dist;
         mJsonData["Ride"]["Ride"]["Time"]=t;
@@ -443,6 +585,14 @@
         td.innerHTML=t;
         var td=tb.rows[3].cells[9];
         td.innerHTML=dist;
+        var td=tb.rows[5].cells[9];
+        td.innerHTML=(dist*73).toFixed(1);
+        var td=tb.rows[6].cells[9];
+        td.innerHTML=(dist*0).toFixed(1);
+        var td=tb.rows[7].cells[9];
+        td.innerHTML=(t*1*200).toFixed(1);
+        var td=tb.rows[8].cells[9];
+        td.innerHTML=(t*1*200/22/24/60).toFixed(2);
 
         mJsonData["Ride"]["Walk"]["Dist"]=dist;
         mJsonData["Ride"]["Walk"]["Time"]=t;
@@ -456,9 +606,6 @@
     mJsonData["QueryCode"]=sendPost;
     console.log(mJsonData);
 
-
-
-
     sendData=function(){
       var mdata=JSON.stringify(mJsonData);
       console.log(mdata)
@@ -468,10 +615,42 @@
     }
 
     setTimeout(sendData,5000);
-
-
-
   });
+</script>
+<script type="text/javascript">
+  getValue=function()
+  {
+    selectValue=$("#MSelect").val();
+    console.log(selectValue);
+    if(selectValue==0)
+    {
+      document.getElementById("Options1").style.visibility="hidden";
+      document.getElementById("Options2").style.visibility="hidden";
+      document.getElementById("Options3").style.visibility="hidden";
+      document.getElementById("Options4").style.visibility="hidden";
+    }
+    else if(selectValue==1)
+    {
+      document.getElementById("Options1").style.visibility="visible";
+      document.getElementById("Options2").style.visibility="hidden";
+      document.getElementById("Options3").style.visibility="hidden";
+      document.getElementById("Options4").style.visibility="hidden";
+    }
+    else if(selectValue==2)
+    {
+      document.getElementById("Options2").style.visibility="visible";
+      document.getElementById("Options1").style.visibility="hidden";
+      document.getElementById("Options3").style.visibility="hidden";
+      document.getElementById("Options4").style.visibility="hidden";
+    }
+    else
+    {
+      document.getElementById("Options3").style.visibility="visible";
+      document.getElementById("Options4").style.visibility="visible";
+      document.getElementById("Options1").style.visibility="hidden";
+      document.getElementById("Options2").style.visibility="hidden";
+    }
+  }
 </script>
 
 <script type="text/javascript">

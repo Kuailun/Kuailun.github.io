@@ -65,3 +65,8 @@ input:focus { box-shadow: 0 0 5px rgba(81, 203, 238, 1); -webkit-box-shadow: 0 0
 span{
     font-size: 10px;
 }
+.inner-input{
+    width: 30px;
+    text-align: center;
+    border:0px;
+}

@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="YuChen Chai">
-<!--  高德地图API-->
+  <!--  高德地图API-->
   <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
   <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=2ef52157e7e81867dbc9c4b1b0b84e92&plugin=AMap.Driving,AMap.Transfer,AMap.Riding,AMap.Walking"></script>
 
@@ -96,18 +96,20 @@
     <h1 class="my-2">欢迎参与郑东新区实验！</h1>
     <h5 class="my-2">我们将根据你的起始位置和终点位置，为你提供各种可行方案以供参考</h5>
     <br>
-    <div style="width:1000px;height:34px;">
-      <input id="QuestionID" type="text" placeholder="问卷ID"  style="height:25px;width:220px"/>
+    <div style="width:1100px;height:34px;">
+      <input id="QuestionID" type="text" placeholder="问卷ID"  style="height:25px;width:80px"/>
       <input id="Start" type="text" placeholder="起点"  style="height:25px;width:220px"/>
       <input id="End" type="text" placeholder="终点"  style="height:25px;width:220px"/>
+      <input id="StartTime" type="text" placeholder="8:00"  style="height:25px;width:100px"/>
       <select class="mSelect" id="MSelect" onchange="getValue()"   style="height:25px;width: 220px">
         <option value ="0">无附加功能</option>
         <option value ="1">卡路里消耗</option>
         <option value="2">温室气体</option>
         <option value="3">污染暴露</option>
       </select>
-      <input type="button" id="result" value="查询"/>
-<!--      <a class="mButton" href="#">查询</a> -->
+      <input type="button" id="search" value="查询" style="padding-left: 5px"/>
+      <input type="button" id="calculate" value="计算" onclick="calculate(0)"/>
+      <input type="button" id="upload" value="上传" onclick="upload()"/>
     </div>
     <br>
 
@@ -138,15 +140,15 @@
 
       <tr align="center" valign="center" bgcolor=#fefefe>
         <th>时间(分钟)</th>
+        <td><input id="input-time-1" class="inner-input" type="text"/></td>
+        <td><input id="input-time-2" class="inner-input" type="text"/></td>
         <td></td>
+        <td><input id="input-time-3" class="inner-input" type="text"/></td>
+        <td><input id="input-time-4" class="inner-input" type="text"/></td>
+        <td><input id="input-time-5" class="inner-input" type="text"/></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td><input id="input-time-6" class="inner-input" type="text"/></td>
+        <td><input id="input-time-7" class="inner-input" type="text"/></td>
       </tr>
       <tr align="center" valign="center" bgcolor=#fefefe>
         <th>距离(公里)</th>
@@ -276,453 +278,16 @@
     <!-- /.container -->
   </footer>
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
 </body>
 
 </html>
 
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-
-<script>
-  var mcity="郑州";
-  var center_x=113.657413;
-  var center_y=34.867203;
-  var QueryCode={
-    LocalSearch:1,
-    SendPost:2,
-    PostDelete:3,
-  }
-  var selectValue=0;
-  var mJsonData={};
-  var options={};
-  options["Health"]={};
-  options["Health"]["Private"]=0;
-  options["Health"]["Taxi"]=0;
-  options["Health"]["TBus"]=0;
-  options["Health"]["TSubway"]=0;
-  options["Health"]["TWalk"]=0;
-  options["Health"]["Bike"]=0;
-  options["Health"]["Walk"]=0;
-
-  options["Social"]={};
-  options["Social"]["Private"]=0;
-  options["Social"]["Taxi"]=0;
-  options["Social"]["TBus"]=0;
-  options["Social"]["TSubway"]=0;
-  options["Social"]["TWalk"]=0;
-  options["Social"]["Bike"]=0;
-  options["Social"]["Walk"]=0;
-
-  options["Pollution1"]={};
-  options["Pollution1"]["Private"]=0;
-  options["Pollution1"]["Taxi"]=0;
-  options["Pollution1"]["TBus"]=0;
-  options["Pollution1"]["TSubway"]=0;
-  options["Pollution1"]["TWalk"]=0;
-  options["Pollution1"]["Bike"]=0;
-  options["Pollution1"]["Walk"]=0;
-
-  options["Pollution2"]={};
-  options["Pollution2"]["Private"]=0;
-  options["Pollution2"]["Taxi"]=0;
-  options["Pollution2"]["TBus"]=0;
-  options["Pollution2"]["TSubway"]=0;
-  options["Pollution2"]["TWalk"]=0;
-  options["Pollution2"]["Bike"]=0;
-  options["Pollution2"]["Walk"]=0;
-
-  $("#result").click(function(){
-    mJsonData={};
-    mJsonData["Driving"]={"Self":{},"Taxi":{}};
-    mJsonData["Transfer"]={"Bus":{},"Subway":{},"Walk":{}};
-    mJsonData["Ride"]={"Walk":{},"Ride":{}};
-  var start = $("#Start").val();
-  var end = $("#End").val();
-  var questionID = $("#QuestionID").val();
-
-  mJsonData["Id"]=questionID;
-
-  console.log(start);
-  var sendPost=QueryCode.SendPost;
-
-  if(questionID==""&&start==""&&end=="")
-  {
-    return;
-  }
-  else if(questionID=="")
-  {
-    sendPost=QueryCode.LocalSearch;
-  }
-  else if(start==""&&end=="")
-  {
-    sendPost=QueryCode.PostDelete;
-  }
-  else
-  {
-    sendPost=QueryCode.SendPost;
-  }
-
-    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
-    //自驾车API处理
-    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
-    driving.search([
-      {keyword: start,city:mcity,extensions:"all"},
-      {keyword: end,city:mcity,extensions:"all"},
-
-    ], function(status, result) {
-      // result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
-      if (status === 'complete') {
-        // console.log(result);
-        var tb=document.getElementById("mtable");
-        var t=Math.round(result.routes[0].time/60);
-        var dist=(result.routes[0].distance/1000).toFixed(1);
-
-        var td=tb.rows[2].cells[1];
-        td.innerHTML=t;
-        var td=tb.rows[3].cells[1];
-        td.innerHTML=dist;
-        var td=tb.rows[5].cells[1];
-        td.innerHTML=(dist*3.5).toFixed(1);
-        var td=tb.rows[6].cells[1];
-        td.innerHTML=(dist*270.57).toFixed(1);
-        var td=tb.rows[7].cells[1];
-        td.innerHTML=(t*0.152*200).toFixed(1);
-        var td=tb.rows[8].cells[1];
-        td.innerHTML=(t*0.152*200/22/24/60).toFixed(2);
-
-        var td=tb.rows[2].cells[2];
-        td.innerHTML=t;
-        var td=tb.rows[3].cells[2];
-        td.innerHTML=dist;
-        var td=tb.rows[5].cells[2];
-        td.innerHTML=(dist*3.5).toFixed(1);
-        var td=tb.rows[6].cells[2];
-        td.innerHTML=(dist*270.57).toFixed(1);
-        var td=tb.rows[7].cells[2];
-        td.innerHTML=(t*0.152*200).toFixed(1);
-        var td=tb.rows[8].cells[2];
-        td.innerHTML=(t*0.152*200/22/24/60).toFixed(2);
-
-        mJsonData["Driving"]["Self"]["Time"]=t;
-        mJsonData["Driving"]["Self"]["Distance"]=parseFloat(dist);
-
-        mJsonData["Driving"]["Taxi"]["Time"]=t;
-        mJsonData["Driving"]["Taxi"]["Distance"]=parseFloat(dist);
-
-
-        log.success('绘制驾车路线完成')
-      } else {
-        log.error('获取驾车数据失败：' + result)
-      }
-    });
-
-    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
-    //公共交通API处理
-    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
-    transfer.search([
-      {keyword: start,city:mcity},
-      //第一个元素city缺省时取transOptions的city属性
-      {keyword: end,city:mcity}
-      //第二个元素city缺省时取transOptions的cityd属性
-    ], function(status, result) {
-
-      // result即是对应的公交路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_TransferResult
-      if (status === 'complete') {
-         console.log(result);
-        var tb=document.getElementById("mtable");
-        var t=Math.round(result.plans[0].time/60);
-
-        var bus_dist=0;
-        var subway_dist=0;
-        var walk_dist=0;
-        var bus_t=0;
-        var subway_t=0;
-        var walk_t=0;
-
-        var mPlan=result.plans[0].segments;
-        for(var i=0;i<mPlan.length;i++)
-        {
-          switch(mPlan[i].transit_mode)
-          {
-            case "WALK":
-              walk_dist=walk_dist+mPlan[i].distance;
-              walk_t=walk_t+mPlan[i].time;
-              break;
-            case "SUBWAY":
-              subway_dist=subway_dist+mPlan[i].distance;
-              subway_t=subway_t+mPlan[i].time;
-              break;
-            case "BUS":
-              bus_dist=bus_dist+mPlan[i].distance;
-              bus_t=bus_t+mPlan[i].time;
-              break;
-          }
-        }
-        bus_dist=(bus_dist/1000).toFixed(1);
-        subway_dist=(subway_dist/1000).toFixed(1);
-        walk_dist=(walk_dist/1000).toFixed(1);
-
-        bus_t=Math.round(bus_t/60);
-        subway_t=Math.round(subway_t/60);
-        walk_t=Math.round(walk_t/60);
-
-        var c=Math.round(result.plans[0].cost);
-
-        var td=tb.rows[2].cells[4];
-        td.innerHTML=bus_t;
-        var td=tb.rows[3].cells[4];
-        td.innerHTML=bus_dist;
-        var td=tb.rows[5].cells[4];
-        td.innerHTML=(bus_dist*5).toFixed(1);
-        var td=tb.rows[6].cells[4];
-        td.innerHTML=(bus_dist*180.38).toFixed(1);
-        var td=tb.rows[7].cells[4];
-        td.innerHTML=(bus_t*0.72*200).toFixed(1);
-        var td=tb.rows[8].cells[4];
-        td.innerHTML=(bus_t*0.72*200/22/24/60).toFixed(2);
-
-        var td=tb.rows[2].cells[5];
-        td.innerHTML=subway_t;
-        var td=tb.rows[3].cells[5];
-        td.innerHTML=subway_dist;
-        var td=tb.rows[5].cells[5];
-        td.innerHTML=(subway_dist*5).toFixed(1);
-        var td=tb.rows[6].cells[5];
-        td.innerHTML=(subway_dist*101.466).toFixed(1);
-        var td=tb.rows[7].cells[5];
-        td.innerHTML=(subway_t*0.3283*200).toFixed(1);
-        var td=tb.rows[8].cells[5];
-        td.innerHTML=(subway_t*0.3283*200/22/24/60).toFixed(2);
-
-        var td=tb.rows[2].cells[6];
-        td.innerHTML=walk_t;
-        var td=tb.rows[3].cells[6];
-        td.innerHTML=walk_dist;
-        var td=tb.rows[5].cells[6];
-        td.innerHTML=(walk_dist*73).toFixed(1);
-        var td=tb.rows[6].cells[6];
-        td.innerHTML=(walk_dist*0).toFixed(1);
-        var td=tb.rows[7].cells[6];
-        td.innerHTML=(walk_t*1*200).toFixed(1);
-        var td=tb.rows[8].cells[6];
-        td.innerHTML=(walk_t*1*200/22/24/60).toFixed(2);
-
-        var td=tb.rows[4].cells[4];
-        td.innerHTML=c;
-
-        var td=tb.rows[4].cells[2];
-        td.innerHTML=result.taxi_cost;
-
-        mJsonData["Driving"]["Taxi"]["Cost"]=result.taxi_cost;
-
-        mJsonData["Transfer"]["Time"]=t;
-        mJsonData["Transfer"]["Cost"]=c;
-        mJsonData["Transfer"]["Bus"]["Dist"]=bus_dist;
-        mJsonData["Transfer"]["Subway"]["Dist"]=subway_dist;
-        mJsonData["Transfer"]["Walk"]["Dist"]=walk_dist;
-
-
-        log.success('绘制公交路线完成')
-      } else {
-        log.error('公交路线数据查询失败' + result)
-      }
-    });
-
-    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
-    //骑行API处理
-    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
-    riding.search([
-      {keyword:start,city:mcity},
-      {keyword: end,city:mcity}
-    ], function(status,result) {
-      // result即是对应的骑行路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_RidingResult
-      if (status === 'complete') {
-        // console.log(result);
-        var tb=document.getElementById("mtable");
-        var t=Math.round(result.routes[0].time/60);
-        var dist=(result.routes[0].distance/1000).toFixed(1);
-
-        var td=tb.rows[2].cells[8];
-        td.innerHTML=t;
-        var td=tb.rows[3].cells[8];
-        td.innerHTML=dist;
-        var td=tb.rows[5].cells[8];
-        td.innerHTML=(dist*30).toFixed(1);
-        var td=tb.rows[6].cells[8];
-        td.innerHTML=(dist*0).toFixed(1);
-        var td=tb.rows[7].cells[8];
-        td.innerHTML=(t*1*200).toFixed(1);
-        var td=tb.rows[8].cells[8];
-        td.innerHTML=(t*1*200/22/24/60).toFixed(2);
-
-        mJsonData["Ride"]["Ride"]["Dist"]=dist;
-        mJsonData["Ride"]["Ride"]["Time"]=t;
-
-        log.success('绘制骑行路线完成')
-      } else {
-        log.error('骑行路线数据查询失败' + result)
-      }
-    });
-
-    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
-    //步行API处理
-    //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
-    walking.search([
-      {keyword: start,city:mcity},
-      {keyword: end,city:mcity}
-    ], function(status, result) {
-      // result即是对应的步行路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_WalkingResult
-      if (status === 'complete') {
-        // console.log(result);
-        var tb=document.getElementById("mtable");
-        var t=Math.round(result.routes[0].time/60);
-        var dist=(result.routes[0].distance/1000).toFixed(1);
-
-        var td=tb.rows[2].cells[9];
-        td.innerHTML=t;
-        var td=tb.rows[3].cells[9];
-        td.innerHTML=dist;
-        var td=tb.rows[5].cells[9];
-        td.innerHTML=(dist*73).toFixed(1);
-        var td=tb.rows[6].cells[9];
-        td.innerHTML=(dist*0).toFixed(1);
-        var td=tb.rows[7].cells[9];
-        td.innerHTML=(t*1*200).toFixed(1);
-        var td=tb.rows[8].cells[9];
-        td.innerHTML=(t*1*200/22/24/60).toFixed(2);
-
-        mJsonData["Ride"]["Walk"]["Dist"]=dist;
-        mJsonData["Ride"]["Walk"]["Time"]=t;
-
-        log.success('绘制步行路线完成')
-      } else {
-        log.error('步行路线数据查询失败' + result)
-      }
-    });
-
-    mJsonData["QueryCode"]=sendPost;
-    console.log(mJsonData);
-
-    sendData=function(){
-      var mdata=JSON.stringify(mJsonData);
-      console.log(mdata)
-      $.post("http://localhost:8000/",mdata,function(data,status){
-        console.log(data)
-      })
-    }
-
-    setTimeout(sendData,5000);
-  });
-</script>
-<script type="text/javascript">
-  getValue=function()
-  {
-    selectValue=$("#MSelect").val();
-    console.log(selectValue);
-    if(selectValue==0)
-    {
-      document.getElementById("Options1").style.visibility="hidden";
-      document.getElementById("Options2").style.visibility="hidden";
-      document.getElementById("Options3").style.visibility="hidden";
-      document.getElementById("Options4").style.visibility="hidden";
-    }
-    else if(selectValue==1)
-    {
-      document.getElementById("Options1").style.visibility="visible";
-      document.getElementById("Options2").style.visibility="hidden";
-      document.getElementById("Options3").style.visibility="hidden";
-      document.getElementById("Options4").style.visibility="hidden";
-    }
-    else if(selectValue==2)
-    {
-      document.getElementById("Options2").style.visibility="visible";
-      document.getElementById("Options1").style.visibility="hidden";
-      document.getElementById("Options3").style.visibility="hidden";
-      document.getElementById("Options4").style.visibility="hidden";
-    }
-    else
-    {
-      document.getElementById("Options3").style.visibility="visible";
-      document.getElementById("Options4").style.visibility="visible";
-      document.getElementById("Options1").style.visibility="hidden";
-      document.getElementById("Options2").style.visibility="hidden";
-    }
-  }
-</script>
-
-<script type="text/javascript">
-TaxiPrice=function(dis,time){
-  if(dis<=2)
-    return 8;
-  else if(dis<=12)
-    return (8+(dis-2)*1.5).toFixed(1);
-  else
-    // console.log((8+15+(dis-12)*2.25).toFixed(1))
-    return (8+15+(dis-12)*2.25).toFixed(1);
-}
-</script>
-
-<script type="text/javascript">
-  //基本地图加载
-  var map1 = new AMap.Map("map-1", {
-    resizeEnable: true,
-    center: [center_x, center_y],//地图中心点
-    zoom: 13 //地图显示的缩放级别
-  });
-  //构造路线导航类
-  var driving = new AMap.Driving({
-    map: map1,
-    panel: "panel1"
-  });
-</script>
-
-<script type="text/javascript">
-  var map2 = new AMap.Map("map-2", {
-    resizeEnable: true,
-    center: [center_x, center_y],//地图中心点
-    zoom: 13
-  });
-  var transOptions = {
-    map: map2,
-    city: mcity,
-    panel: 'panel2',
-    policy: AMap.TransferPolicy.LEAST_TIME //乘车策略
-    // policy: AMap.TransferPolicy.NO_SUBWAY //乘车策略
-  };
-  //构造公交换乘类
-  var transfer = new AMap.Transfer(transOptions);
-
-</script>
-
-<script type="text/javascript">
-  var map = new AMap.Map("map-4", {
-    resizeEnable: true,
-    center: [center_x,center_y],//地图中心点
-    zoom: 13 //地图显示的缩放级别
-  });
-  //步行导航
-  var riding = new AMap.Riding({
-    map: map,
-    panel: "panel4"
-  });
-</script>
-
-<script type="text/javascript">
-  var map = new AMap.Map("map-5", {
-    resizeEnable: true,
-    center: [center_x, center_y],//地图中心点
-    zoom: 13 //地图显示的缩放级别
-  });
-  //步行导航
-  var walking = new AMap.Walking({
-    map: map,
-    panel: "panel5"
-  });
-  $("#result").click(function(){
-
-  });
-
-</script>
+<!--  JS代码-->
+<script src="js/Function_Upload.js"></script>
+<script src="js/Function_Calculate.js"></script>
+<script src="js/API_Search.js"></script>
+<script src="js/Map_Show.js"></script>

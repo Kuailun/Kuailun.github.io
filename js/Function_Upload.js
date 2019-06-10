@@ -55,7 +55,7 @@ upload=function(){
     sendData=function(){
         var mdata=JSON.stringify(mJsonData);
         console.log(mdata)
-        $.post("192.168.43.145:8000/",mdata,function(data,status){
+        $.post("http://192.168.43.145:8000/",mdata,function(data,status){
             console.log(data)
         })
     }

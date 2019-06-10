@@ -129,13 +129,14 @@ $("#search").click(function(){
     //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
     //公共交通API处理
     //===== ===== ===== ===== ===== ===== ===== ===== ===== =====
+    // transfer.leaveAt("2019-6-10","22:00")
     transfer.search([
         {keyword: start,city:mcity},
         //第一个元素city缺省时取transOptions的city属性
         {keyword: end,city:mcity}
         //第二个元素city缺省时取transOptions的cityd属性
     ], function(status, result) {
-
+        console.log(status)
         // result即是对应的公交路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_TransferResult
         if (status === 'complete') {
             var tb=document.getElementById("mtable");

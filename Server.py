@@ -2,6 +2,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler, test
 import sys
 import os
 import json
+import codecs
 
 if not os.path.exists("Database"):
     os.mkdir("Database")
@@ -14,7 +15,10 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
     def do_POST(self):
 
         '''Decode the incoming post'''
-        content_length=self.headers._headers[2][1]
+        content_length=0
+        for i in range(len(self.headers._headers)):
+            if(self.headers._headers[i][0]=='Content-Length'):
+                content_length=self.headers._headers[i][1]
         data=self.rfile.read(int(content_length))
 
         '''Send the response to client'''
@@ -22,7 +26,7 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header("Content-type",'text/html')
         SimpleHTTPRequestHandler.end_headers(self)
-        message="Received"
+        message="数据已接受"
         self.wfile.write(bytes(message,"utf8"))
 
         '''Handle the data'''
@@ -31,8 +35,8 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
         print("Got Post: Length:{0},Id:{1},Function:{2}".format(content_length,mD["Id"],mD["QueryCode"]))
 
         if(mD["Id"]=="Save" or mD["Id"]=="save"):
-            fp=open("Database/mData.txt","w")
-            fp.write(json.dumps(mData))
+            fp=codecs.open("Database/mData.txt","w","utf-8")
+            fp.write(json.dumps(mData,ensure_ascii=False))
             fp.close()
             return
 
@@ -54,4 +58,4 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
         self.wfile.write(bytes(message, "utf8"))
 
 if __name__ == '__main__':
-    test(CORSRequestHandler, HTTPServer, port=int(sys.argv[1]) if len(sys.argv) > 1 else 8000)
+    test(CORSRequestHandler, HTTPServer, port=int(sys.argv[1]) if len(sys.argv) > 1 else 8000,bind="192.168.125.102")

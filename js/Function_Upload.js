@@ -48,6 +48,7 @@ upload=function(){
     mJsonData["Start"]=start;
     mJsonData["End"]=end;
     mJsonData["StartTime"]=starttime;
+    mJsonData["Id"]=questionID;
 
     mJsonData["QueryCode"]=sendPost;
     console.log(mJsonData);
@@ -55,8 +56,8 @@ upload=function(){
     sendData=function(){
         var mdata=JSON.stringify(mJsonData);
         console.log(mdata)
-        $.post("http://192.168.43.145:8000/",mdata,function(data,status){
-            console.log(data)
+        $.post("http://39.105.151.175:80/",mdata,function(data,status){
+            alert(data)
         })
     }
 

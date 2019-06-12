@@ -56,7 +56,7 @@ upload=function(){
     sendData=function(){
         var mdata=JSON.stringify(mJsonData);
         console.log(mdata)
-        $.post("http://39.105.151.175:80/",mdata,function(data,status){
+        $.post("https://39.105.151.175:80/",mdata,function(data,status){
             alert(data)
         })
     }

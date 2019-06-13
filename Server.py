@@ -58,4 +58,4 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
         self.wfile.write(bytes(message, "utf8"))
 
 if __name__ == '__main__':
-    test(CORSRequestHandler, HTTPServer, port=int(sys.argv[1]) if len(sys.argv) > 1 else 8000,bind="192.168.125.102")
+    test(CORSRequestHandler, HTTPServer, port=int(sys.argv[1]) if len(sys.argv) > 1 else 80,bind="192.168.125.102")

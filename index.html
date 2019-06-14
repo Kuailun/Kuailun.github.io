@@ -11,7 +11,7 @@
   <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
   <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=2ef52157e7e81867dbc9c4b1b0b84e92&plugin=AMap.Driving,AMap.Transfer,AMap.Riding,AMap.Walking"></script>
 
-  <title>欢迎来到郑东新区实验——一个MIT的城市实验</title>
+  <title>幸福城市·郑州实践</title>
 
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
       <img src="resource/MIT_Logo.jpg" height="30px" style="padding-right: 5px">
-      <a class="navbar-brand" href="index.html">郑东新区实验</a>
+      <a class="navbar-brand" href="index.html">幸福城市·郑州实践</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -60,22 +60,22 @@
         <!-- Slide One - Set the background image for this slide in the line below -->
         <div class="carousel-item active" style="background-image: url('./resource/Display-Slide-1.jpg')">
           <div class="carousel-caption d-none d-md-block">
-            <h3>First Slide</h3>
-            <p>This is a description for the first slide.</p>
+            <h3>健康城市</h3>
+            <p>研究健康的工作学习环境的社会收益，探索城市环境改善作为人才吸引的软实力</p>
           </div>
         </div>
 <!--         Slide Two - Set the background image for this slide in the line below -->
         <div class="carousel-item" style="background-image: url('./resource/Display-Slide-2.jpg')">
           <div class="carousel-caption d-none d-md-block">
-            <h3>Second Slide</h3>
-            <p>This is a description for the second slide.</p>
+            <h3>快乐休闲</h3>
+            <p>研究安全、宜人和丰富的城市生活，探索城市归属感的多维度构成</p>
           </div>
         </div>
         <!-- Slide Three - Set the background image for this slide in the line below -->
         <div class="carousel-item" style="background-image: url('./resource/Display-Slide-3.jpg')">
           <div class="carousel-caption d-none d-md-block">
-            <h3>Third Slide</h3>
-            <p>This is a description for the third slide.</p>
+            <h3>绿色出行</h3>
+            <p>探究高效有序的城市交通系统，探索绿色低碳、可持续的城市运作系统</p>
           </div>
         </div>
       </div>
@@ -94,7 +94,7 @@
 
   <div class="container">
     <h1 class="my-2">欢迎参与郑东新区实验！</h1>
-    <h5 class="my-2">我们将根据你的起始位置和终点位置，为你提供各种可行方案以供参考</h5>
+    <h5 class="my-2">我们将根据你的起始位置和终点位置，为你定制各种方案以供参考</h5>
     <br>
     <div style="width:1100px;height:34px;">
       <input id="QuestionID" type="text" placeholder="问卷ID"  style="height:25px;width:80px"/>
@@ -107,6 +107,7 @@
         <option value="2">温室气体</option>
         <option value="3">污染暴露</option>
       </select>
+      <input type="button" id="searchID" value="代码" onclick="GetID()"/>
       <input type="button" id="search" value="查询" style="padding-left: 5px"/>
       <input type="button" id="calculate" value="计算" onclick="calculate(0)"/>
       <input type="button" id="upload" value="上传" onclick="upload()"/>

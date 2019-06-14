@@ -5,6 +5,8 @@ var QueryCode={
     LocalSearch:1,
     SendPost:2,
     PostDelete:3,
+    getID:4,
+    ManualSave:5,
 }
 var selectValue=0;
 
@@ -262,7 +264,6 @@ $("#search").click(function(){
 getValue=function()
 {
     selectValue=$("#MSelect").val();
-    console.log(selectValue);
     if(selectValue==0)
     {
         document.getElementById("Options1").style.visibility="hidden";

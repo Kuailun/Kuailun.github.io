@@ -36,6 +36,10 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
     def end_headers (self):
         self.send_header('Access-Control-Allow-Origin', '*')
         SimpleHTTPRequestHandler.end_headers(self)
+    def do_HEAD(self):
+        return
+    def do_GET(self):
+        return
     def do_POST(self):
 
         '''Decode the incoming post'''
@@ -50,15 +54,19 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
                 continue
 
         '''Handle the error'''
-        if(content_length==''):
+        if(content_length==''or content_length==0):
             return
 
         data=self.rfile.read(int(content_length))
 
         '''Handle the data'''
         s = str(data, 'utf-8')
-        mD = json.loads(s)
-        print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+"  IP:{0}  Length:{1}  Id:{2}  Function:{3}".format(ip,content_length, mD["Id"], mD["QueryCode"]))
+        try:
+            mD = json.loads(s)
+            print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+"  IP:{0}  Length:{1}  Id:{2}  Function:{3}".format(ip,content_length, mD["Id"], mD["QueryCode"]))
+        except:
+            print("Error happens")
+            return;
 
         status=0
         message=""

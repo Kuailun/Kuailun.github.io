@@ -111,10 +111,10 @@
       <input type="button" id="search" value="查询" style="padding-left: 5px"/>
       <input type="button" id="calculate" value="计算" onclick="calculate(0)"/>
       <input type="button" id="upload" value="上传" onclick="upload()"/>
-<!--      <div class="wrap red"  onclick="open_cover_img('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560770227645&di=7337e00188e9fc14030e78de542b7edb&imgtype=0&src=http%3A%2F%2F7n.w3cschool.cn%2Fattachments%2Fcover%2Fcover_html.png%3Ft%3D1554702879%3FimageView2%2F1%2Fw%2F150%2Fh%2F84')">-->
-<!--        <div class="shadow"></div>-->
-<!--        <div class="ball" id="mBall"></div>-->
-<!--      </div>-->
+      <div class="wrap red"  onclick="open_cover_img('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560770227645&di=7337e00188e9fc14030e78de542b7edb&imgtype=0&src=http%3A%2F%2F7n.w3cschool.cn%2Fattachments%2Fcover%2Fcover_html.png%3Ft%3D1554702879%3FimageView2%2F1%2Fw%2F150%2Fh%2F84')">
+        <div class="shadow"></div>
+        <div class="ball" id="mBall"></div>
+      </div>
     </div>
     <br>
 
@@ -273,6 +273,11 @@
   </div>
 
   <div id="enlarge" align="center"  class="cover_layer" onclick="close_cover_img();">
+    <div style="height: 150px"></div>
+    <font id="chart_title" color="white">卡路里消耗</font>
+    <div id="show_container" style="height:700px;width: 800px;background-color: white">
+
+    </div>
     <img id="cover_img" class="cover_img"/>
   </div>
 
@@ -296,19 +301,16 @@
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!--  JS代码-->
+<script type="text/javascript" src="js/echarts.min.js"></script>
+<script type="text/javascript" src="js/echarts-gl.min.js"></script>
+<script type="text/javascript" src="js/ecStat.min.js"></script>
+<script type="text/javascript" src="js/dataTool.min.js"></script>
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>-->
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>-->
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>-->
+<script type="text/javascript" src="js/simplex.js"></script>
+
 <script src="js/Function_Upload.js"></script>
 <script src="js/Function_Calculate.js"></script>
 <script src="js/API_Search.js"></script>
 <script src="js/Map_Show.js"></script>
-<script type="text/javascript">
-  var open_cover_img = function(url){
-    $("#cover_img").attr("src",url);
-    $("#cover_img").attr("width","50%");
-    $("#cover_img").attr("height","50%");
-    $("#cover_img").attr("src",url);
-    $("#enlarge").show();
-  };
-  var close_cover_img = function(){
-    $("#enlarge").hide();
-  };
-</script>

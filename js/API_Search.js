@@ -1,72 +1,6 @@
 var mcity="郑州";
 var center_x=113.657413;
 var center_y=34.867203;
-var QueryCode={
-    LocalSearch:1,
-    SendPost:2,
-    PostDelete:3,
-    getID:4,
-    ManualSave:5,
-}
-var selectValue=0;
-
-var mTableData=
-    {
-        time_self_driving:0,
-        time_taxi:0,
-        time_transit_bus:0,
-        time_transit_subway:0,
-        time_transit_walk:0,
-        time_riding:0,
-        time_walk:0,
-        dist_self_driving:0,
-        dist_taxi:0,
-        dist_transit_bus:0,
-        dist_transit_subway:0,
-        dist_transit_walk:0,
-        dist_riding:0,
-        dist_walk:0,
-        cost_taxi:0,
-        cost_tran:0
-    }
-
-var mJsonData={};
-var options={};
-options["Health"]={};
-options["Health"]["Private"]=0;
-options["Health"]["Taxi"]=0;
-options["Health"]["TBus"]=0;
-options["Health"]["TSubway"]=0;
-options["Health"]["TWalk"]=0;
-options["Health"]["Bike"]=0;
-options["Health"]["Walk"]=0;
-
-options["Social"]={};
-options["Social"]["Private"]=0;
-options["Social"]["Taxi"]=0;
-options["Social"]["TBus"]=0;
-options["Social"]["TSubway"]=0;
-options["Social"]["TWalk"]=0;
-options["Social"]["Bike"]=0;
-options["Social"]["Walk"]=0;
-
-options["Pollution1"]={};
-options["Pollution1"]["Private"]=0;
-options["Pollution1"]["Taxi"]=0;
-options["Pollution1"]["TBus"]=0;
-options["Pollution1"]["TSubway"]=0;
-options["Pollution1"]["TWalk"]=0;
-options["Pollution1"]["Bike"]=0;
-options["Pollution1"]["Walk"]=0;
-
-options["Pollution2"]={};
-options["Pollution2"]["Private"]=0;
-options["Pollution2"]["Taxi"]=0;
-options["Pollution2"]["TBus"]=0;
-options["Pollution2"]["TSubway"]=0;
-options["Pollution2"]["TWalk"]=0;
-options["Pollution2"]["Bike"]=0;
-options["Pollution2"]["Walk"]=0;
 
 $("#search").click(function(){
     mJsonData={};
@@ -106,19 +40,19 @@ $("#search").click(function(){
             // console.log(result);
             var tb=document.getElementById("mtable");
 
-            mTableData.time_self_driving=Math.round(result.routes[0].time/60);
-            mTableData.dist_self_driving=(result.routes[0].distance/1000).toFixed(1);
-            mTableData.time_taxi=Math.round(result.routes[0].time/60);
-            mTableData.dist_taxi=(result.routes[0].distance/1000).toFixed(1);
+            mTableData.C_time_self_driving=Math.round(result.routes[0].time/60);
+            mTableData.C_dist_self_driving=(result.routes[0].distance/1000).toFixed(1);
+            mTableData.C_time_taxi=Math.round(result.routes[0].time/60);
+            mTableData.C_dist_taxi=(result.routes[0].distance/1000).toFixed(1);
 
-            $("#input-time-1").val(mTableData.time_self_driving);
+            $("#input-time-1").val(mTableData.C_time_self_driving);
             var td=tb.rows[3].cells[1];
-            td.innerHTML=mTableData.dist_self_driving;
+            td.innerHTML=mTableData.C_dist_self_driving;
             var td=tb.rows[5].cells[1];
 
-            $("#input-time-2").val(mTableData.time_taxi);
+            $("#input-time-2").val(mTableData.C_time_taxi);
             var td=tb.rows[3].cells[2];
-            td.innerHTML=mTableData.dist_taxi;
+            td.innerHTML=mTableData.C_dist_taxi;
 
             calculate(1);
 
@@ -170,33 +104,33 @@ $("#search").click(function(){
                 }
             }
 
-            mTableData.dist_transit_bus=(bus_dist/1000).toFixed(1);
-            mTableData.dist_transit_subway=(subway_dist/1000).toFixed(1);
-            mTableData.dist_transit_walk=(walk_dist/1000).toFixed(1);
-            mTableData.time_transit_bus=Math.round(bus_t/60);
-            mTableData.time_transit_subway=Math.round(subway_t/60);
-            mTableData.time_transit_walk=Math.round(walk_t/60);
+            mTableData.C_dist_transit_bus=(bus_dist/1000).toFixed(1);
+            mTableData.C_dist_transit_subway=(subway_dist/1000).toFixed(1);
+            mTableData.C_dist_transit_walk=(walk_dist/1000).toFixed(1);
+            mTableData.C_time_transit_bus=Math.round(bus_t/60);
+            mTableData.C_time_transit_subway=Math.round(subway_t/60);
+            mTableData.C_time_transit_walk=Math.round(walk_t/60);
 
-            mTableData.cost_tran=Math.round(result.plans[0].cost);
-            mTableData.cost_taxi=result.taxi_cost;
+            mTableData.C_cost_tran=Math.round(result.plans[0].cost);
+            mTableData.C_cost_taxi=result.taxi_cost;
 
-            $("#input-time-3").val(mTableData.time_transit_bus);
+            $("#input-time-3").val(mTableData.C_time_transit_bus);
             var td=tb.rows[3].cells[4];
-            td.innerHTML=mTableData.dist_transit_bus;
+            td.innerHTML=mTableData.C_dist_transit_bus;
 
-            $("#input-time-4").val(mTableData.time_transit_subway);
+            $("#input-time-4").val(mTableData.C_time_transit_subway);
             var td=tb.rows[3].cells[5];
-            td.innerHTML=mTableData.dist_transit_subway;
+            td.innerHTML=mTableData.C_dist_transit_subway;
 
-            $("#input-time-5").val(mTableData.time_transit_walk);
+            $("#input-time-5").val(mTableData.C_time_transit_walk);
             var td=tb.rows[3].cells[6];
-            td.innerHTML=mTableData.dist_transit_walk;
+            td.innerHTML=mTableData.C_dist_transit_walk;
 
             var td=tb.rows[4].cells[4];
-            td.innerHTML=mTableData.cost_tran;
+            td.innerHTML=mTableData.C_cost_tran;
 
             var td=tb.rows[4].cells[2];
-            td.innerHTML=mTableData.cost_taxi;
+            td.innerHTML=mTableData.C_cost_taxi;
 
             calculate(2);
 
@@ -218,12 +152,12 @@ $("#search").click(function(){
             // console.log(result);
             var tb=document.getElementById("mtable");
 
-            mTableData.time_riding=Math.round(result.routes[0].time/60);
-            mTableData.dist_riding=(result.routes[0].distance/1000).toFixed(1);
+            mTableData.C_time_riding=Math.round(result.routes[0].time/60);
+            mTableData.C_dist_riding=(result.routes[0].distance/1000).toFixed(1);
 
-            $("#input-time-6").val(mTableData.time_riding);
+            $("#input-time-6").val(mTableData.C_time_riding);
             var td=tb.rows[3].cells[8];
-            td.innerHTML=mTableData.dist_riding;
+            td.innerHTML=mTableData.C_dist_riding;
 
             calculate(3);
             log.success('绘制骑行路线完成')
@@ -244,12 +178,12 @@ $("#search").click(function(){
             // console.log(result);
             var tb=document.getElementById("mtable");
 
-            mTableData.time_walk=Math.round(result.routes[0].time/60);
-            mTableData.dist_walk=(result.routes[0].distance/1000).toFixed(1);
+            mTableData.C_time_walk=Math.round(result.routes[0].time/60);
+            mTableData.C_dist_walk=(result.routes[0].distance/1000).toFixed(1);
 
-            $("#input-time-7").val(mTableData.time_walk);
+            $("#input-time-7").val(mTableData.C_time_walk);
             var td=tb.rows[3].cells[9];
-            td.innerHTML=mTableData.dist_walk;
+            td.innerHTML=mTableData.C_dist_walk;
 
             calculate(4);
 
@@ -263,33 +197,56 @@ $("#search").click(function(){
 
 getValue=function()
 {
+    var tb1 = document.getElementById("Options1");
+    var tb2 = document.getElementById("Options2");
     selectValue=$("#MSelect").val();
     if(selectValue==0)
     {
         document.getElementById("Options1").style.visibility="hidden";
         document.getElementById("Options2").style.visibility="hidden";
-        document.getElementById("Options3").style.visibility="hidden";
-        document.getElementById("Options4").style.visibility="hidden";
     }
     else if(selectValue==1)
     {
+        document.getElementById("Options1_Title").innerHTML="卡路里消耗(大卡/月)";
+        document.getElementById("Options2_Title").innerHTML="预期减重(千克/月)";
+        put_data_in_Grid(1,data_H);
+        put_data_in_Grid(2,data_HE);
+        table_H=merge_data(data_H);
+        table_HE=merge_data(data_HE);
         document.getElementById("Options1").style.visibility="visible";
-        document.getElementById("Options2").style.visibility="hidden";
-        document.getElementById("Options3").style.visibility="hidden";
-        document.getElementById("Options4").style.visibility="hidden";
+        document.getElementById("Options2").style.visibility="visible";
     }
     else if(selectValue==2)
     {
+        document.getElementById("Options1_Title").innerHTML="PM2.5排放(毫克)";
+        document.getElementById("Options2_Title").innerHTML="香烟燃烧根数";
+        put_data_in_Grid(1,data_S1);
+        put_data_in_Grid(2,data_S1E);
+        table_S1=merge_data(data_S1);
+        table_S1E=merge_data(data_S1E);
+        document.getElementById("Options1").style.visibility="visible";
         document.getElementById("Options2").style.visibility="visible";
-        document.getElementById("Options1").style.visibility="hidden";
-        document.getElementById("Options3").style.visibility="hidden";
-        document.getElementById("Options4").style.visibility="hidden";
     }
-    else
+    else if(selectValue==3)
     {
-        document.getElementById("Options3").style.visibility="visible";
-        document.getElementById("Options4").style.visibility="visible";
-        document.getElementById("Options1").style.visibility="hidden";
-        document.getElementById("Options2").style.visibility="hidden";
+        document.getElementById("Options1_Title").innerHTML="CO2排放(克)";
+        document.getElementById("Options2_Title").innerHTML="吸收所需树木";
+        put_data_in_Grid(1,data_S2);
+        put_data_in_Grid(2,data_S2E);
+        table_S2=merge_data(data_S2);
+        table_S2E=merge_data(data_S2E);
+        document.getElementById("Options1").style.visibility="visible";
+        document.getElementById("Options2").style.visibility="visible";
+    }
+    else if(selectValue==4)
+    {
+        document.getElementById("Options1_Title").innerHTML="PM2.5暴露(微克/m³*月)";
+        document.getElementById("Options2_Title").innerHTML="吸烟(根/月)";
+        put_data_in_Grid(1,data_P);
+        put_data_in_Grid(2,data_PE);
+        table_P=merge_data(data_P);
+        table_PE=merge_data(data_PE);
+        document.getElementById("Options1").style.visibility="visible";
+        document.getElementById("Options2").style.visibility="visible";
     }
 }

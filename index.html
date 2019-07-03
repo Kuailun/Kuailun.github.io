@@ -11,7 +11,7 @@
   <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
   <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=2ef52157e7e81867dbc9c4b1b0b84e92&plugin=AMap.Driving,AMap.Transfer,AMap.Riding,AMap.Walking"></script>
 
-  <title>幸福城市·郑州实践</title>
+  <title>幸福城市·郑州创新</title>
 
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
     <div class="container">
       <img src="resource/MIT_Logo.png" height="30px" style="padding-right: 5px">
       <img src="resource/Tsinghua_Logo.png" height="30px" style="padding-right: 5px">
-      <a class="navbar-brand" href="index.html">幸福城市·郑州实践</a>
+      <a class="navbar-brand" href="index.html">幸福城市·郑州创新</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -43,6 +43,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="contact.html">联系我们</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="calculate_money(3,10)">抽奖专用</a>
           </li>
         </ul>
       </div>
@@ -96,7 +99,7 @@
     <h1 class="my-2">欢迎参与郑东新区实验！</h1>
     <h5 class="my-2">我们将根据你的起始位置和终点位置，为你定制各种方案以供参考</h5>
     <br>
-    <div style="width:1100px;height:34px;">
+    <div style="width:1200px;height:34px;">
       <input id="QuestionID" type="text" placeholder="问卷ID"  style="height:25px;width:80px"/>
       <input id="Start" type="text" placeholder="起点"  style="height:25px;width:220px"/>
       <input id="End" type="text" placeholder="终点"  style="height:25px;width:220px"/>
@@ -104,14 +107,17 @@
       <select class="mSelect" id="MSelect" onchange="getValue()"   style="height:25px;width: 220px">
         <option value ="0">无附加功能</option>
         <option value ="1">卡路里消耗</option>
-        <option value="2">温室气体</option>
-        <option value="3">污染暴露</option>
+        <option value="2">社会外部性1</option>
+        <option value="3">社会外部性2</option>
+        <option value="4">污染暴露</option>
+        <option value="5">健康饮食</option>
       </select>
+      <input id="AQI_Value" type="text" placeholder="AQI" onchange="AQI_Change()"  style="height:25px;width:50px"/>
       <input type="button" id="searchID" value="代码" onclick="GetID()"/>
       <input type="button" id="search" value="查询" style="padding-left: 5px"/>
       <input type="button" id="calculate" value="计算" onclick="calculate(0)"/>
       <input type="button" id="upload" value="上传" onclick="upload()"/>
-      <div class="wrap red"  onclick="open_cover_img('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560770227645&di=7337e00188e9fc14030e78de542b7edb&imgtype=0&src=http%3A%2F%2F7n.w3cschool.cn%2Fattachments%2Fcover%2Fcover_html.png%3Ft%3D1554702879%3FimageView2%2F1%2Fw%2F150%2Fh%2F84')">
+      <div class="wrap red"  onclick="open_cover()">
         <div class="shadow"></div>
         <div class="ball" id="mBall"></div>
       </div>
@@ -178,7 +184,7 @@
         <td></td>
       </tr>
       <tr id="Options1" align="center" valign="center" bgcolor=#fefefe style="visibility: hidden">
-        <th>卡路里消耗(卡)</th>
+        <th id="Options1_Title"></th>
         <td></td>
         <td></td>
         <td></td>
@@ -190,7 +196,7 @@
         <td></td>
       </tr>
       <tr id="Options2" align="center" valign="center" bgcolor=#fefefe style="visibility: hidden">
-        <th>温室气体(克)</th>
+        <th id="Options2_Title"></th>
         <td></td>
         <td></td>
         <td></td>
@@ -201,30 +207,30 @@
         <td></td>
         <td></td>
       </tr>
-      <tr id="Options3" align="center" valign="center" bgcolor=#fefefe style="visibility: hidden">
-        <th>PM2.5暴露量(微克/立方米*分钟)</th>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr id="Options4" align="center" valign="center" bgcolor=#fefefe style="visibility: hidden">
-        <th>等价吸烟数量(根)</th>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+<!--      <tr id="Options3" align="center" valign="center" bgcolor=#fefefe style="visibility: hidden">-->
+<!--        <th>PM2.5暴露量(微克/立方米*分钟)</th>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--      </tr>-->
+<!--      <tr id="Options4" align="center" valign="center" bgcolor=#fefefe style="visibility: hidden">-->
+<!--        <th>等价吸烟数量(根)</th>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--      </tr>-->
 
     </table>
 
@@ -272,13 +278,19 @@
     </div>
   </div>
 
-  <div id="enlarge" align="center"  class="cover_layer" onclick="close_cover_img();">
+  <div id="enlarge0" align="center"  class="cover_layer" onclick="close_cover_img(0);">
     <div style="height: 150px"></div>
-    <font id="chart_title" color="white">卡路里消耗</font>
-    <div id="show_container" style="height:700px;width: 800px;background-color: white">
+    <font id="chart_title0" color="white">卡路里消耗</font>
+    <div id="show_container0" style="height:700px;width: 800px;background-color: white">
 
     </div>
-    <img id="cover_img" class="cover_img"/>
+  </div>
+
+  <div id="enlarge1" align="center"  class="cover_layer" onclick="close_cover_img(1);">
+    <div style="height: 250px"></div>
+    <font id="chart_title1" color="white" >健康介绍</font>
+    <br>
+    <img id="cover_img1" class="cover_img" src="resource/Nutrient.jpg"/>
   </div>
 
   <br>
@@ -310,6 +322,7 @@
 <!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>-->
 <script type="text/javascript" src="js/simplex.js"></script>
 
+<script src="js/Public_Data.js"></script>
 <script src="js/Function_Upload.js"></script>
 <script src="js/Function_Calculate.js"></script>
 <script src="js/API_Search.js"></script>

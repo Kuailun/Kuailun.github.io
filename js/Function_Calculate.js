@@ -799,11 +799,3 @@ var close_cover_img = function (d) {
     }
 
 };
-var AQI_Change=function()
-{
-    var temp = $("#AQI_Value").val();
-    if(temp!="")
-    {
-        AQI=parseInt(temp);
-    }
-}

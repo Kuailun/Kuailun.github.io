@@ -67,7 +67,7 @@ upload=function(){
         mJsonData["QueryCode"]=sendPost;
         console.log(mJsonData);
 
-        sendData(mJsonData,0);
+        sendPosts("public/id",mJsonData,0);
     }
     catch (e) {
         alert("请检查错误");
@@ -79,6 +79,35 @@ sendData=function(d,f){
     var mdata=JSON.stringify(d);
     console.log(mdata)
     $.post("http://39.105.151.175:80/",mdata,function(data,status){
+        if(f==0)
+        {
+            alert(data)
+        }
+        else if(f==1)
+        {
+            $("#QuestionID").val(data);
+        }
+
+    })
+}
+
+sendPosts=function(data,f){
+    var mdata=JSON.stringify(data);
+    console.log(mdata)
+    var str='';
+    switch (f) {
+        case 0:
+            str='public/id';
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+
+    }
+    $.post("http://127.0.0.1:80/"+route,mdata,function(data,status){
         if(f==0)
         {
             alert(data)

@@ -2,7 +2,7 @@
  * 修改此处参数
  * @type {{LocalSearch: number, getID: number, SendPost: number, ManualSave: number, PostDelete: number}}
  */
-var AQI=65;
+var AQI=117;
 
 /**
  * 请勿修改此处参数

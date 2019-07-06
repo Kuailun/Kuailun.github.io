@@ -65,7 +65,6 @@ upload=function(){
         mJsonData["Id"]=questionID;
 
         mJsonData["QueryCode"]=sendPost;
-        console.log(mJsonData);
 
         sendPosts(mJsonData,1);
     }
@@ -74,22 +73,6 @@ upload=function(){
     }
 
 }
-
-// sendData=function(d,f){
-//     var mdata=JSON.stringify(d);
-//     console.log(mdata)
-//     $.post("http://39.105.151.175:80/",mdata,function(data,status){
-//         if(f==0)
-//         {
-//             alert(data)
-//         }
-//         else if(f==1)
-//         {
-//             $("#QuestionID").val(data);
-//         }
-//
-//     })
-// }
 
 sendPosts=function(data,f){
     var mdata=JSON.stringify(data);

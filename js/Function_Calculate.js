@@ -159,7 +159,7 @@ var round_data=function(d){
     return d;
 }
 var merge_data=function(s,t){
-    t=[parseFloat(s[0]),parseFloat(s[2])+parseFloat(s[3])+parseFloat(s[4]),parseFloat(s[5]),parseFloat(s[6])];
+    t=[parseFloat(s[0]),(parseFloat(s[2])+parseFloat(s[3])+parseFloat(s[4])).toFixed(2),parseFloat(s[5]),parseFloat(s[6])];
     return t;
 }
 var open_cover_img0 = function (url) {

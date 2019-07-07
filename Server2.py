@@ -5,6 +5,8 @@ import codecs
 import xlwt
 from flask_apscheduler import APScheduler
 import time
+import random
+import math
 
 class Config(object):
     JOBS=[
@@ -108,6 +110,28 @@ def save_post(data):
     fp.close()
     pass
 
+def randomNormalDistribution():
+    u=0
+    v=0
+    w=0
+
+    while(w==0 or w>=1):
+        u=random.random()*2-1;
+        v=random.random()*2-1;
+        w=u*u+v*v;
+
+    c=math.sqrt((-2*math.log(w))/w)
+    return u*c
+
+def calculate_money(mean,std_dev):
+    money=(randomNormalDistribution()*std_dev+mean)/4
+    if(money<=1):
+        money=1
+    elif(money>50):
+        money=50
+    money=math.floor(money)
+    return money
+
 def delete_post(data):
     if os.path.exists("Database/"+data+".txt"):
         os.remove("Database/"+data+".txt")
@@ -193,6 +217,14 @@ def Public_Submit():
 def Public_Total():
     response = {
         "Message": len(mData),
+    }
+    return jsonify(response), 200
+
+@app.route('/public/lottery',methods=['POST'])
+def Public_Lottery():
+    temp = calculate_money(3, 48)
+    response = {
+        "Message": "恭喜您获得"+str(temp)+"元!",
     }
     return jsonify(response), 200
 

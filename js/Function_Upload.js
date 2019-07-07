@@ -88,7 +88,8 @@ sendPosts=function(data,f){
         case 2://查询人数
             str='public/total';
             break;
-        case 3:
+        case 3://查询金额
+            str='public/lottery';
             break;
 
     }
@@ -99,7 +100,6 @@ sendPosts=function(data,f){
         }
         else if(f==2)
         {
-        console.log(data);
             document.getElementById("Title").innerHTML="欢迎参与郑东新区实验!"+"          "+data['Message']+"/5000";
         }
         else

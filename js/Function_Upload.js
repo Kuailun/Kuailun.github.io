@@ -97,6 +97,11 @@ sendPosts=function(data,f){
         {
             $("#QuestionID").val(data['Message']);
         }
+        else if(f==2)
+        {
+        console.log(data);
+            document.getElementById("Title").innerHTML="欢迎参与郑东新区实验!"+"          "+data['Message']+"/5000";
+        }
         else
         {
             alert(data['Message']);
@@ -129,4 +134,8 @@ GetID=function(){
     IDData["Id"]=questionID;
     IDData["QueryCode"]=QueryCode.getID;
     sendPosts(IDData,0);
+}
+
+window.onload=function(){
+    sendPosts({},2);
 }

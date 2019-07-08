@@ -249,4 +249,9 @@ getValue=function()
         document.getElementById("Options1").style.visibility="visible";
         document.getElementById("Options2").style.visibility="visible";
     }
+    else if(selectValue==5)
+    {
+        document.getElementById("Options1").style.visibility="hidden";
+        document.getElementById("Options2").style.visibility="hidden";
+    }
 }

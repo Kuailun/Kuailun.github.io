@@ -46,22 +46,22 @@ calculate_P_C = function () {
     data_PE=[mTableData.PE_self_driving,mTableData.PE_taxi,mTableData.PE_transit_bus,mTableData.PE_transit_subway,mTableData.PE_transit_walk,mTableData.PE_riding,mTableData.PE_walk];
 }
 calculate_H_C=function(){
-    mTableData.H_self_driving   = (rate_H_C.direct[0] * mTableData.C_dist_self_driving).toFixed(2);
-    mTableData.H_taxi           = (rate_H_C.direct[1] * mTableData.C_dist_taxi).toFixed(2);
-    mTableData.H_transit_bus    = (rate_H_C.direct[2] * mTableData.C_dist_transit_bus).toFixed(2);
-    mTableData.H_transit_subway = (rate_H_C.direct[3] * mTableData.C_dist_transit_subway).toFixed(2);
-    mTableData.H_transit_walk   = (rate_H_C.direct[4] * mTableData.C_dist_transit_walk).toFixed(2);
-    mTableData.H_riding         = (rate_H_C.direct[5] * mTableData.C_dist_riding).toFixed(2);
-    mTableData.H_walk           = (rate_H_C.direct[6] * mTableData.C_dist_walk).toFixed(2);
+    mTableData.H_self_driving   = (rate_H_C.direct[0] * mTableData.C_time_self_driving).toFixed(2);
+    mTableData.H_taxi           = (rate_H_C.direct[1] * mTableData.C_time_taxi).toFixed(2);
+    mTableData.H_transit_bus    = (rate_H_C.direct[2] * mTableData.C_time_transit_bus).toFixed(2);
+    mTableData.H_transit_subway = (rate_H_C.direct[3] * mTableData.C_time_transit_subway).toFixed(2);
+    mTableData.H_transit_walk   = (rate_H_C.direct[4] * mTableData.C_time_transit_walk).toFixed(2);
+    mTableData.H_riding         = (rate_H_C.direct[5] * mTableData.C_time_riding).toFixed(2);
+    mTableData.H_walk           = (rate_H_C.direct[6] * mTableData.C_time_walk).toFixed(2);
     data_H=[mTableData.H_self_driving,mTableData.H_taxi,mTableData.H_transit_bus,mTableData.H_transit_subway,mTableData.H_transit_walk,mTableData.H_riding,mTableData.H_walk];
 
-    mTableData.HE_self_driving   = (rate_H_C.equal[0] * mTableData.C_dist_self_driving).toFixed(2);
-    mTableData.HE_taxi           = (rate_H_C.equal[1] * mTableData.C_dist_taxi).toFixed(2);
-    mTableData.HE_transit_bus    = (rate_H_C.equal[2] * mTableData.C_dist_transit_bus).toFixed(2);
-    mTableData.HE_transit_subway = (rate_H_C.equal[3] * mTableData.C_dist_transit_subway).toFixed(2);
-    mTableData.HE_transit_walk   = (rate_H_C.equal[4] * mTableData.C_dist_transit_walk).toFixed(2);
-    mTableData.HE_riding         = (rate_H_C.equal[5] * mTableData.C_dist_riding).toFixed(2);
-    mTableData.HE_walk           = (rate_H_C.equal[6] * mTableData.C_dist_walk).toFixed(2);
+    mTableData.HE_self_driving   = (rate_H_C.equal[0] * mTableData.C_time_self_driving).toFixed(2);
+    mTableData.HE_taxi           = (rate_H_C.equal[1] * mTableData.C_time_taxi).toFixed(2);
+    mTableData.HE_transit_bus    = (rate_H_C.equal[2] * mTableData.C_time_transit_bus).toFixed(2);
+    mTableData.HE_transit_subway = (rate_H_C.equal[3] * mTableData.C_time_transit_subway).toFixed(2);
+    mTableData.HE_transit_walk   = (rate_H_C.equal[4] * mTableData.C_time_transit_walk).toFixed(2);
+    mTableData.HE_riding         = (rate_H_C.equal[5] * mTableData.C_time_riding).toFixed(2);
+    mTableData.HE_walk           = (rate_H_C.equal[6] * mTableData.C_time_walk).toFixed(2);
     data_HE=[mTableData.HE_self_driving,mTableData.HE_taxi,mTableData.HE_transit_bus,mTableData.HE_transit_subway,mTableData.HE_transit_walk,mTableData.HE_riding,mTableData.HE_walk];
 }
 calculate_S1_C=function(){
@@ -223,10 +223,10 @@ var open_cover_img0 = function (url) {
             yAxis: {
                 type: 'category',
                 inverse: true,
-                data: ['Car', 'Bus', 'Bike', 'Walk'],
+                data: ['机动车', '公交交通', '骑行', '步行'],
                 axisLabel: {
                     formatter: function (value) {
-                        return '{' + value + '| }\n{value|' + value + '}';
+                        return '\n{value|' + value + '}';
                     },
                     margin: 20,
                     rich: {
@@ -234,7 +234,7 @@ var open_cover_img0 = function (url) {
                             lineHeight: 30,
                             align: 'center'
                         },
-                        Car: {
+                        机动车: {
                             height: 40,
                             align: 'center',
                             backgroundColor: {
@@ -370,10 +370,10 @@ var open_cover_img0 = function (url) {
             yAxis: {
                 type: 'category',
                 inverse: true,
-                data: ['Car', 'Bus', 'Bike', 'Walk'],
+                data: ['机动车', '公交交通', '骑行', '步行'],
                 axisLabel: {
                     formatter: function (value) {
-                        return '{' + value + '| }\n{value|' + value + '}';
+                        return '\n{value|' + value + '}';
                     },
                     margin: 20,
                     rich: {
@@ -517,10 +517,10 @@ var open_cover_img0 = function (url) {
             yAxis: {
                 type: 'category',
                 inverse: true,
-                data: ['Car', 'Bus', 'Bike', 'Walk'],
+                data: ['机动车', '公交交通', '骑行', '步行'],
                 axisLabel: {
                     formatter: function (value) {
-                        return '{' + value + '| }\n{value|' + value + '}';
+                        return '\n{value|' + value + '}';
                     },
                     margin: 20,
                     rich: {
@@ -664,10 +664,10 @@ var open_cover_img0 = function (url) {
             yAxis: {
                 type: 'category',
                 inverse: true,
-                data: ['Car', 'Bus', 'Bike', 'Walk'],
+                data: ['机动车', '公交交通', '骑行', '步行'],
                 axisLabel: {
                     formatter: function (value) {
-                        return '{' + value + '| }\n{value|' + value + '}';
+                        return '\n{value|' + value + '}';
                     },
                     margin: 20,
                     rich: {

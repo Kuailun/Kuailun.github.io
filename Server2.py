@@ -124,7 +124,7 @@ def randomNormalDistribution():
     return u*c
 
 def calculate_money(mean,std_dev):
-    money=(randomNormalDistribution()*std_dev+mean)/4
+    money=(randomNormalDistribution()*std_dev+mean)
     if(money<=1):
         money=1
     elif(money>50):
@@ -222,7 +222,7 @@ def Public_Total():
 
 @app.route('/public/lottery',methods=['POST'])
 def Public_Lottery():
-    temp = calculate_money(3, 48)
+    temp = calculate_money(10, 10)
     response = {
         "Message": "恭喜您获得"+str(temp)+"元!",
     }

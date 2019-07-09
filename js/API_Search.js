@@ -115,16 +115,13 @@ $("#search").click(function(){
             mTableData.C_cost_taxi=result.taxi_cost;
 
             $("#input-time-3").val(mTableData.C_time_transit_bus);
-            var td=tb.rows[3].cells[4];
-            td.innerHTML=mTableData.C_dist_transit_bus;
+            $("#input-dist-3").val(mTableData.C_dist_transit_bus);
 
             $("#input-time-4").val(mTableData.C_time_transit_subway);
-            var td=tb.rows[3].cells[5];
-            td.innerHTML=mTableData.C_dist_transit_subway;
+            $("#input-dist-4").val(mTableData.C_dist_transit_subway);
 
             $("#input-time-5").val(mTableData.C_time_transit_walk);
-            var td=tb.rows[3].cells[6];
-            td.innerHTML=mTableData.C_dist_transit_walk;
+            $("#input-dist-5").val(mTableData.C_dist_transit_walk);
 
             var td=tb.rows[4].cells[4];
             td.innerHTML=mTableData.C_cost_tran;

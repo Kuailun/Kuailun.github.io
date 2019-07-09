@@ -8,6 +8,10 @@ calculate = function (section) {
     mTableData.C_time_transit_subway = $("#input-time-4").val();
     mTableData.C_time_transit_walk = $("#input-time-5").val();
 
+    mTableData.C_dist_transit_bus=$("#input-dist-3").val();
+    mTableData.C_dist_transit_subway=$("#input-dist-4").val();
+    mTableData.C_dist_transit_walk=$("#input-dist-5").val();
+
     mTableData.C_time_riding = $("#input-time-6").val();
     mTableData.C_time_walk = $("#input-time-7").val();
 

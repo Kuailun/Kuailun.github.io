@@ -276,6 +276,29 @@ def Private_All():
     }
     return jsonify(response),200
 
+@app.route('/private/average',methods=['POST'])
+def Private_Average():
+    mJson = request.get_json()
+    mReturn={}
+    for key in mJson:
+        num=0
+        total=0
+        for code in mJson[key]:
+            if(code in mID):
+                num=num+1
+                total=total+mID[code]['count']
+                pass
+            pass
+        if(num!=0):
+            mReturn[key]=total/num
+        else:
+            mReturn[key]=0
+        pass
+    response={
+        "Message":mReturn,
+    }
+    return jsonify(response),200
+
 if __name__=='__main__':
     scheduler=APScheduler()
     scheduler.init_app(app)

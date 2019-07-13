@@ -93,7 +93,7 @@ sendPosts=function(data,f){
             break;
 
     }
-    $.post("http://127.0.0.1:80/"+str,mdata,function(data,status){
+    $.post("http://39.105.151.175:80/"+str,mdata,function(data,status){
         if(f==0)
         {
             $("#QuestionID").val(data['Message']);

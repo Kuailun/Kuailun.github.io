@@ -777,19 +777,25 @@ var open_cover_img0 = function (url) {
     $("#enlarge0").show();
 };
 var open_cover_img1 = function () {
-    var ROOT_PATH = window.location.host;
-    var dom = document.getElementById("show_container1");
     $("#enlarge1").show();
 }
-var open_cover=function(){
-    selectValue = $("#MSelect").val();
-    if(selectValue<=4)
+var open_cover=function(f){
+    if(f==0)
     {
-        open_cover_img0("");
+        selectValue = $("#MSelect").val();
+        if(selectValue<=4)
+        {
+            open_cover_img0("");
+        }
+        else {
+            open_cover_img1();
+        }
     }
-    else {
-        open_cover_img1();
+    else if(f==1)
+    {
+        $("#enlarge2").show();
     }
+
 }
 var close_cover_img = function (d) {
     if(d==0)
@@ -799,6 +805,12 @@ var close_cover_img = function (d) {
     else if(d==1)
     {
         $("#enlarge1").hide();
+    }
+    else if(d==2)
+    {
+        var vid = document.getElementById("mVideo");
+        vid.pause();
+        $("#enlarge2").hide();
     }
 
 };

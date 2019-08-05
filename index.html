@@ -36,7 +36,7 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="about.html">关于实验</a>
+            <a class="nav-link pointer" onclick="open_cover(1)">关于实验</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" onclick="sea()">团队成员</a>
@@ -45,7 +45,7 @@
             <a class="nav-link" href="show.html">成果展示</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" onclick="sendPosts({},3)">抽奖专用</a>
+            <a class="nav-link pointer" onclick="sendPosts({},3)">抽奖专用</a>
           </li>
         </ul>
       </div>
@@ -116,7 +116,7 @@
       <input type="button" id="search" value="查询" style="padding-left: 5px"/>
       <input type="button" id="calculate" value="计算" onclick="calculate(0)"/>
       <input type="button" id="upload" value="上传" onclick="upload()"/>
-      <div class="wrap red"  onclick="open_cover()">
+      <div class="wrap red"  onclick="open_cover(0)">
         <div class="shadow"></div>
         <div class="ball" id="mBall"></div>
       </div>
@@ -290,6 +290,12 @@
     <font id="chart_title1" color="white" >旅游收入</font>
     <br>
     <img id="cover_img1" class="cover_img" src="resource/Nutrient.jpg"/>
+  </div>
+
+  <div id="enlarge2" align="center"  class="cover_layer" onclick="close_cover_img(2);">
+    <div style="height: 100px"></div>
+    <br>
+    <video id="mVideo" height="80%" id="cover_img2" class="cover_img" controls="controls" src="resource/ShowVideo.mp4"/>
   </div>
 
   <br>

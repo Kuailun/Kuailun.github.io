@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="YuChen Chai">
+    <!--  高德地图API-->
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=2ef52157e7e81867dbc9c4b1b0b84e92&plugin=AMap.Driving,AMap.Transfer,AMap.Riding,AMap.Walking"></script>
+
+    <title>幸福城市·郑州创新</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/modern-business.css" rel="stylesheet">
+    <link href="css/own-style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- Navigation -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <img src="resource/MIT_Logo.png" height="30px" style="padding-right: 5px">
+        <img src="resource/Tsinghua_Logo.png" height="30px" style="padding-right: 5px">
+        <a class="navbar-brand" href="index.html">幸福城市·郑州创新</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" onclick="open_datashow(0)">每日样本</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="open_datashow(1)">样本特性</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="map-bin.html">地理分布</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="open_datashow(3)">交通比例</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div style="background-color: #000000">
+    <video id="video-back" autoplay="true" muted="true" loop="true" src="resource/DataVideo.mp4" style="height:920px;width:100%;"></video>
+</div>
+
+<!-- Page Content -->
+
+<div id="enlarge2" align="center"  class="cover_layer" onclick="close_datashow();">
+    <div style="height: 100px"></div>
+    <font id="chart_title1" color="white">卡路里消耗</font>
+    <div id="show_container1" style="height:800px;width: 1200px;background-color: white">
+
+    </div>
+</div>
+
+
+<!-- /.container -->
+
+<!-- Footer -->
+<footer class="py-5 bg-dark" style="min-width: 1100px">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; YuChen Chai 2019</p>
+    </div>
+    <!-- /.container -->
+</footer>
+
+</body>
+
+</html>
+
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!--  JS代码-->
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xfhhaTThl11qYVrqLZii6w8qE5ggnhrY&__ec_v__=20190126"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>-->
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>-->
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>-->
+<script type="text/javascript" src="js/simplex.js"></script>
+
+<script src="js/Public_Data.js"></script>
+<script src="js/Function_Upload.js"></script>
+<script src="js/Function_Calculate.js"></script>
+<script src="js/API_Search.js"></script>
+<script src="js/Map_Show.js"></script>

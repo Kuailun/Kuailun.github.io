@@ -37,7 +37,7 @@ $("#search").click(function(){
     ], function(status, result) {
         // result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
         if (status === 'complete') {
-            // console.log(result);
+            console.log(result);
             var tb=document.getElementById("mtable");
 
             mTableData.C_time_self_driving=Math.round(result.routes[0].time/60);

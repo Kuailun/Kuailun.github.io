@@ -22,7 +22,9 @@ payloadData={
     'key':'5d4c13b42404f36355b92fefd12ed027'
 }
 
-lines=2000
+lines=3340
+
+Abnormal=[]
 
 for i in range(lines):
     t=random.randint(1,100)/1000
@@ -31,15 +33,19 @@ for i in range(lines):
     r=requests.get(url,params=payloadData)
     content=json.loads(r.text)['geocodes']
     if(len(content)==0):
-        continue
-    content1=content[0]['location']
+        content1='0,0'
+        Abnormal.append([i,data[i][1]])
+    else:
+        content1=content[0]['location']
 
     payloadData['address'] = data[i][2]
     r = requests.get(url, params=payloadData)
     content = json.loads(r.text)['geocodes']
     if (len(content) == 0):
-        continue
-    content2 = content[0]['location']
+        content2 = '0,0'
+        Abnormal.append([i, data[i][1]])
+    else:
+        content2 = content[0]['location']
 
     lon, lat = content1.split(',')
     data[i].append(float(lon))
@@ -60,3 +66,5 @@ for i in range(lines):
     pass
 
 myWorkbook.save('output.xls')
+
+print(Abnormal)
